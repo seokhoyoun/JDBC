@@ -1,0 +1,35 @@
+CREATE TABLE TB_BOOK(
+ book_id   number primary key,
+       title     varchar2(50) not null,
+       author    varchar2(20) not null,
+       publisher  varchar2(20) not null, 
+       publish_date    date  not null,	
+       price      NUMBER not null
+);
+
+COMMENT ON COLUMN TB_BOOK.BOOK_ID IS '책번호';
+COMMENT ON COLUMN TB_BOOK.TITLE IS '책제목';
+COMMENT ON COLUMN TB_BOOK.AUTHOR IS '저자명';
+COMMENT ON COLUMN TB_BOOK.PUBLISHER IS '출판사';
+COMMENT ON COLUMN TB_BOOK.PUBLISH_DATE IS '출판날짜';
+COMMENT ON COLUMN TB_BOOK.PRICE IS '가격';
+
+DROP SEQUENCE SEQ_BID;
+
+CREATE SEQUENCE SEQ_BID
+START WITH 1
+INCREMENT BY 1
+NOCYCLE
+NOCACHE;
+
+INSERT INTO TB_BOOK
+VALUES (SEQ_BID.NEXTVAL, '자바왕','김자바','채림당','99/10/22',20000);
+INSERT INTO TB_BOOK
+VALUES (SEQ_BID.NEXTVAL, 'DB의 정석','박디비','지혜와 나무','03/04/11',30000);
+INSERT INTO TB_BOOK
+VALUES (SEQ_BID.NEXTVAL, 'SHOW JDBC','오제이','영풍문화','07/11/25',25000);
+INSERT INTO TB_BOOK
+VALUES (SEQ_BID.NEXTVAL, 'MASTER SQL','이디','알라딘출판','11/02/21',30000);
+
+SELECT * FROM TB_BOOK;
+COMMIT;
