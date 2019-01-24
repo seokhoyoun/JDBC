@@ -55,13 +55,46 @@ public class EmployeeCont {
 
 
 	public void insertEmp(Employee emp) {
-		int result = edao.insert(emp);
+		int result = edao.insert2(emp);
 		
 		if(result <= 0) {
 			System.out.println("\n새 직원 등록 실패");
 			System.out.println("확인하고 다시 시도해주세요.");
 		}
+		else {
+			System.out.println("직원 저장 완료");
+		}
 		return;
+	}
+
+
+	public void updatePhone(Employee emp) {
+		int result = edao.updatePhone(emp);
+		if(result > 0) {
+			System.out.println("\n직원의 전화번호 변경 성공");
+		}
+		else {
+			System.out.println("\n전화번호 변경 실패\n확인하고 다시 시도하세요.");
+		}
+	}
+
+
+	public void updateBonusPct(Employee emp) {
+		int result = edao.updateBonusPct(emp);
+		if(result > 0) 
+			System.out.println("\n직원의 보너스포인트 변경 성공");
+		else 
+			System.out.println("\n보너스 포인트 변경 실패\n확인하고 다시 시도하세요.");
+		
+	}
+
+
+	public void deleteEmp(String empid) {
+		int result = edao.deleteEmp(empid);
+		if(result > 0) 
+			System.out.println("\n직원 삭제 성공");
+		else 
+			System.out.println("\n직원 삭제 실패\n확인하고 다시 시도하세요.");
 	}
 	
 }

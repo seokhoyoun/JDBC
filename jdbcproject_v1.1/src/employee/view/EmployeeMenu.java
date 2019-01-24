@@ -36,9 +36,9 @@ public class EmployeeMenu {
 			case 3 : printList(ec.selectJobid(inputJobid())); break;
 			case 4 : printList(ec.selectDeptid(inputDeptid())); break;
 			case 5 : ec.insertEmp(inputEmp()); break;
-			case 6 : break;
-			case 7 : break;
-			case 8 : break;
+			case 6 : ec.updatePhone(inputPhone()); break;
+			case 7 : ec.updateBonusPct(inputBonusPct()); break;
+			case 8 : ec.deleteEmp(this.inputEmpid()); break;
 			case 9 : System.out.print("\n종료(y) 취소(n) : "); 
 					 if(sc.next().toUpperCase().charAt(0) == 'Y')
 						 return;
@@ -47,6 +47,26 @@ public class EmployeeMenu {
 			default: System.out.println("없는 번호 입니다. 다시 입력하세요");
 			}
 		}while(true);
+		
+	}
+	// 수정할 보너스 포인트와 해당 사번 입력용
+	public Employee inputBonusPct() {
+		Employee emp = new Employee();
+		System.out.print("\n변경할 직원의 사번 입력 : ");
+		emp.setEmpid(sc.next());
+		System.out.print("변경할 보너스 포인트 입력 : ");
+		emp.setBonusPct(sc.nextDouble());
+		return emp;
+	}
+	
+	// 수정할 전화번호와 사번 입력용
+	public Employee inputPhone() {
+		System.out.print("\n변경할 직원의 사번 입력 : ");
+		Employee emp = new Employee();
+		emp.setEmpid(sc.next());
+		System.out.print("변경할 전화번호 - 빼고 입력 : ");
+		emp.setPhone(sc.next());
+		return emp;
 		
 	}
 	// 새로 등록할 직원 정보 입력용

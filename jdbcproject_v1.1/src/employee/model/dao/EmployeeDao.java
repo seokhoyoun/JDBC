@@ -216,8 +216,6 @@ public class EmployeeDao {
 		String query = "insert into employee values "
 				+ "(empid_seq.nextval,'"+emp.getEmpName()+"','"+emp.getEmpNO()+"','"+emp.getEmail()+"','"+emp.getPhone()+"','"+emp.getHireDate()+"','"+
 				emp.getJobid()+"',"+emp.getSalary()+","+emp.getBonusPct()+", '"+emp.getMarriage()+"', '"+emp.getMgrid()+"', '"+emp.getDeptid()+"')";
-					
-		
 		try{
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:xe", "student", "student");
@@ -226,11 +224,9 @@ public class EmployeeDao {
 			result = stmt.executeUpdate(query);
 			 if(result > 0) {
 				 conn.commit();
-				 System.out.println("직원 저장 완료");
 			 }
 			 else
 				conn.rollback();
-					
 		}catch (Exception e) {
 		}finally {
 			try {
@@ -240,7 +236,91 @@ public class EmployeeDao {
 				e.printStackTrace();
 			}
 		}
+		return result;
+	}
+	
+	public int insert2(Employee emp) {
+		// 수정중
+		String query = "insert into employee values (empid_seq.nextval,'"+emp.getEmpName()+"','"+emp.getEmpNO()+"','"+emp.getEmail()+"','"+emp.getPhone()+"','"+emp.getHireDate()+"','"+
+				emp.getJobid()+"',"+emp.getSalary()+","+emp.getBonusPct()+", '"+emp.getMarriage()+"', '"+emp.getMgrid()+"', '"+emp.getDeptid()+"')";
+		int result = 0;			
+		
+		try(Connection conn= DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:xe", "student", "student");
+					Statement stmt = conn.createStatement();){
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			conn.setAutoCommit(false);
+			result = stmt.executeUpdate(query);
+			 if(result > 0) 
+				 conn.commit();
+			 else
+				conn.rollback();
+					
+		}catch (Exception e) {
+		}
 		
 		return result;
+	}
+	public int updatePhone(Employee emp) {
+		int result = 0;
+		Connection conn = null;
+		Statement stmt = null;
+		String query = "update employee set phone = '"+emp.getPhone()+"' where emp_id = '"+
+						emp.getEmpid()+"'";
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:xe", "student", "student");
+			conn.setAutoCommit(false);
+			stmt = conn.createStatement();
+			result = stmt.executeUpdate(query);
+			if(result > 0)
+				conn.commit();
+			else
+				conn.rollback();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	public int updateBonusPct(Employee emp) {
+		int result = 0;
+		String query = "update employee set bonus_pct = "+emp.getBonusPct()+" where emp_id = '"+emp.getEmpid()+"'";
+			try(Connection conn= DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:xe", "student", "student");
+				Statement stmt = conn.createStatement();){
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				conn.setAutoCommit(false);
+				result = stmt.executeUpdate(query);
+					if(result > 0) 
+						conn.commit();
+					else
+						conn.rollback();
+				
+			}catch (Exception e) {
+			}
+	return result;
+	}
+	public int deleteEmp(String empid) {
+		int result = 0;
+		String query = "delete employee where emp_id = '"+empid+"'";
+			try(Connection conn= DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:xe", "student", "student");
+				Statement stmt = conn.createStatement();){
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				conn.setAutoCommit(false);
+				result = stmt.executeUpdate(query);
+					if(result > 0) 
+						conn.commit();
+					else
+						conn.rollback();
+				
+			}catch (Exception e) {
+			}
+	return result;
 	}
 }
