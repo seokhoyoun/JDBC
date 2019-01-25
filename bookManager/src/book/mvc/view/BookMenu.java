@@ -38,7 +38,7 @@ public class BookMenu {
 		case 1 : bc.insertBook(inputBook()); break;
 		case 2 : bc.updateBook(inputBook(new Book())); break;
 		case 3 : bc.deleteBook(inputBookId()); break;
-		case 4 : bc.searchBook(inputBookId()); break;
+		case 4 : displayBook(bc.searchBook(inputBookId())); break;
 		case 5 : displayBooks(bc.searchBookTitle(inputBookTitle())); break;
 		case 6 : displayBooks(bc.selectAll()); break;
 		case 9 : return;
@@ -88,7 +88,6 @@ public class BookMenu {
 	
 	public void displayBook(Book b) {
 		System.out.println(b);
-		System.out.println("");
 	}
 	
 	public void displayError(String mes) {

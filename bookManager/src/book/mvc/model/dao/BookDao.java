@@ -114,9 +114,9 @@ public class BookDao {
 	public ArrayList<Book> selectAllBooks() {
 		ArrayList<Book> list = new ArrayList<>();
 		String query = "select * from tb_book";
-		Book b = new Book();
 		try(ResultSet rset = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "student", "student").createStatement().executeQuery(query)){
 			while(rset.next()) {
+				Book b = new Book();
 				b.setBid(rset.getInt("book_id"));
 				b.setTitle(rset.getString("title"));
 				b.setAuthor(rset.getString("author"));
