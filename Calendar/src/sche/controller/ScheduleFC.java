@@ -46,8 +46,14 @@ public class ScheduleFC implements ISchedule{
 	
 
 	@Override
-	public void modifySchedule(String index) {
+	public void modifySchedule(String index, Schedule schedule) {
 //		printSchedule(index);
+		int result = ss.modifySchedule(index, schedule);
+		if(result > 0)
+			System.out.println("일정을 성공적으로 수정하였습니다.");
+		else
+			System.out.println("일정 수정을 실패했습니다.");
+		
 		
 	}
 

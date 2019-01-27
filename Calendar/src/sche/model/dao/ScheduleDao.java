@@ -37,4 +37,18 @@ public class ScheduleDao {
 		return result;
 	}
 
+	public int modifySchedule(Connection conn, Schedule schedule, String index) {
+		int result = 0;
+		String query = "update tb_schedule set title = ?, s_content = ? where s_id = ?";
+		try(PreparedStatement ps = conn.prepareStatement(query)){
+			ps.setString(1, schedule.getTitle());
+			ps.setString(2, schedule.getContent());
+			ps.setString(3, index);
+			result = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 }

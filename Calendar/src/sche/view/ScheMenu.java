@@ -33,7 +33,7 @@ public class ScheMenu {
 		
 		switch(mnum) {
 		case 1 : s.addSchedule(chooseDate(), putData()); break;
-		case 2 : s.modifySchedule(chooseDate());break;
+		case 2 : s.modifySchedule(chooseSche(),putData());break;
 		case 3 : s.delSchedule(chooseDate());break;
 		case 4 : printSchedule(); break;
 		case 5 : c.switchCalendar(); break;
@@ -91,9 +91,9 @@ public class ScheMenu {
 		return sdf.format(now.getTime()); 
 	}
 	
-	private String chooseSche() {
+	public String chooseSche() {
 		System.out.print("변경하실 일정 번호를 입력하세요 : ");
-		return String.format("02d%", sc.nextInt());
+		return String.valueOf(sc.nextInt());
 	}
 
 }
