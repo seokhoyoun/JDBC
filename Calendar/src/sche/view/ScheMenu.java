@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import sche.controller.CalendarFC;
 import sche.controller.ScheduleFC;
+import sche.model.vo.Schedule;
 
 public class ScheMenu {
 	
@@ -31,7 +32,7 @@ public class ScheMenu {
 		int mnum = sc.nextInt();
 		
 		switch(mnum) {
-		case 1 : s.addSchedule(chooseDate()); break;
+		case 1 : s.addSchedule(chooseDate(), putData()); break;
 		case 2 : s.modifySchedule(chooseDate());break;
 		case 3 : s.delSchedule(chooseDate());break;
 		case 4 : printSchedule(); break;
@@ -44,6 +45,19 @@ public class ScheMenu {
 		
 		}
 	}
+	public Schedule putData() {
+		System.out.println("일정 제목 입력 : ");
+		sc.nextLine();
+		String title = sc.nextLine();
+		System.out.println("일정 내용을 입력해주세요 (종료:exit)");
+		StringBuilder sb = new StringBuilder();
+		String line = null;
+		while(!(line = sc.nextLine()).equals("exit")) {
+			sb.append(line+"\n");
+		}
+		return new Schedule(title, sb.toString());
+	}
+	
 	// 날짜 출력 메소드
 	public void printCalendar() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy'년 'MMM");
@@ -65,19 +79,16 @@ public class ScheMenu {
 	public void printSchedule(String index) {
 		
 	}
-	// 일정을 추가/변경/삭제 하기위해 해당 날짜를 정하는 메소드
+	// 일정을 추가하기위해 해당 날짜를 정하는 메소드
 	public String chooseDate() {
-		SimpleDateFormat sdf = new SimpleDateFormat("YYYYMMDD");
 		Calendar now = c.getCalendar();
 		String month = String.valueOf(now.get(Calendar.MONTH)+1);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		
 		System.out.print(month+"월 1일 부터 ~ "+now.getActualMaximum(Calendar.DATE)+"일 사이의 날짜를 입력하세요 : ");
 		int date = sc.nextInt();
 		now.set(Calendar.DATE, date);
-		String dnum = sdf.format(now.getTime()); // 년/월/일 
-		printSchedule(dnum); // 해당 날짜의 모든 일정을 출력
-		String snum = chooseSche(); // 번호 입력 받음
-		return sdf.format(now.getTime())+snum; // ex) 2019012601 형식으로 전달 [년/월/일/번호]
+		return sdf.format(now.getTime()); 
 	}
 	
 	private String chooseSche() {

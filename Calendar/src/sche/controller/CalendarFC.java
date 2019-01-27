@@ -1,8 +1,6 @@
 package sche.controller;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.Scanner;
 
 public class CalendarFC implements ICalendar{

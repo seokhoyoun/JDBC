@@ -1,25 +1,41 @@
 package sche.model.vo;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 public class Schedule implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 9094521820763193567L;
+	private String id;
 	private String title;
-	private String text;
-	private String time;
+	private Date time;
+	private String content;
 	
 	public Schedule() {
 	}
 
-	public Schedule(String title, String text, String time) {
+	
+	public Schedule(String title, String content) {
 		super();
 		this.title = title;
-		this.text = text;
+		this.content = content;
+	}
+
+
+	public Schedule(String id, String title, Date time, String content) {
+		super();
+		this.id = id;
+		this.title = title;
 		this.time = time;
+		this.content = content;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getTitle() {
@@ -30,26 +46,36 @@ public class Schedule implements Serializable {
 		this.title = title;
 	}
 
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	public String getTime() {
+	public Date getTime() {
 		return time;
 	}
 
-	public void setTime(String time) {
+	public void setTime(Date time) {
 		this.time = time;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 	@Override
 	public String toString() {
-		return title + "," + text + "," + time;
+		return id + "\t" + title + "\t" + time + "\t" + content;
 	}
+	
+	
+
+	
+
+	
 	
 	
 	
