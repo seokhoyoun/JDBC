@@ -4,7 +4,7 @@ public interface ICalendar {
 	
 	String[][] printCalendar();
 	
-	void switchCalendar(); 
+	String[][] switchCalendar(int year, int month); 
 	
 	
 }

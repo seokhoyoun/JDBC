@@ -1,12 +1,10 @@
 package sche.controller;
 
 import java.util.Calendar;
-import java.util.Scanner;
 
 public class CalendarFC implements ICalendar{
 
 	private Calendar now = Calendar.getInstance();
-	private Scanner sc = new Scanner(System.in);
 	
 	public Calendar getCalendar() {
 		return now;
@@ -32,16 +30,13 @@ public class CalendarFC implements ICalendar{
 		return drr;
 		
 	}
+	
 	@Override
-	public void switchCalendar() {
-		
-		System.out.print("YEAR : ");
-		int year = sc.nextInt();
-		System.out.print("MONTH : ");
-		int month = sc.nextInt();
-		System.out.println();
+	public String[][] switchCalendar(int year, int month) {
 		now.set(Calendar.YEAR, year);
 		now.set(Calendar.MONTH, month-1);
+		return printCalendar();
+		
 	}
 	
 	

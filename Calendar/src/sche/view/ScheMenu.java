@@ -14,10 +14,9 @@ public class ScheMenu {
 	private ScheduleFC s = new ScheduleFC();
 	private CalendarFC c = new CalendarFC();
 	private Scanner sc = new Scanner(System.in);
-	static int count = 0; 
 	
 	public void mainMenu() {
-		c.printCalendar();
+		printCalendar(c.printCalendar());
 		
 		while(true) {
 			System.out.println("====================================================");
@@ -37,7 +36,7 @@ public class ScheMenu {
 		case 2 : s.modifySchedule(chooseSche(),putData());break;
 		case 3 : s.delSchedule(chooseSche());break;
 		case 4 : printSchedule(s.printSchedule()); break;
-		case 5 : c.switchCalendar(); break;
+		case 5 : switchCalendar(); break;
 		case 6 : s.fileSave(); break;
 		case 7 : s.fileLoad(); break;
 		case 0 : return;
@@ -57,12 +56,19 @@ public class ScheMenu {
 		}
 		return new Schedule(title, sb.toString());
 	}
-	
+	public void switchCalendar() {
+		
+		System.out.print("YEAR : ");
+		int year = sc.nextInt();
+		System.out.print("MONTH : ");
+		int month = sc.nextInt();
+		printCalendar(c.switchCalendar(year, month));
+	}
 	// 날짜 출력 메소드
-	public void printCalendar() {
+	public void printCalendar(String[][] drr) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy'년 'MMM");
 		System.out.println(sdf.format(c.getCalendar().getTime()));
-		String[][] drr = c.printCalendar();
+		drr = c.printCalendar();
 		System.out.println("SUN\tMON\tTUE\tWED\tTHU\tFRI\tSAT");
 		for(int i = 0; i < drr.length; i++) {
 			for(int j = 0; j < drr[i].length; j++) {
