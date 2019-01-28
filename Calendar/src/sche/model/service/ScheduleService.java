@@ -1,6 +1,7 @@
 package sche.model.service;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 
 import common.JDBCTemp;
 import sche.model.dao.ScheduleDao;
@@ -31,6 +32,28 @@ public class ScheduleService {
 				JDBCTemp.rollback(conn);
 			JDBCTemp.close(conn);
 		return result;
+	}
+
+	public int delSchedule(String index) {
+		Connection conn = JDBCTemp.getConnection();
+		int result = dao.delSchedule(conn,index);
+		if(result > 0)
+			JDBCTemp.commit(conn);
+		else
+			JDBCTemp.rollback(conn);
+		JDBCTemp.close(conn);
+		return result;
+	}
+
+	public ArrayList<Schedule> printSchedule() {
+		Connection conn = JDBCTemp.getConnection();
+		ArrayList<Schedule> list = dao.printSchedule(conn);
+		if(list.isEmpty())
+			JDBCTemp.rollback(conn);
+		else
+			JDBCTemp.commit(conn);
+		JDBCTemp.close(conn);
+		return list;
 	}
 
 }

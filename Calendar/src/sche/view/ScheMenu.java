@@ -1,6 +1,7 @@
 package sche.view;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Scanner;
 
@@ -34,14 +35,13 @@ public class ScheMenu {
 		switch(mnum) {
 		case 1 : s.addSchedule(chooseDate(), putData()); break;
 		case 2 : s.modifySchedule(chooseSche(),putData());break;
-		case 3 : s.delSchedule(chooseDate());break;
-		case 4 : printSchedule(); break;
+		case 3 : s.delSchedule(chooseSche());break;
+		case 4 : printSchedule(s.printSchedule()); break;
 		case 5 : c.switchCalendar(); break;
 		case 6 : s.fileSave(); break;
 		case 7 : s.fileLoad(); break;
 		case 0 : return;
 		}
-		
 		
 		}
 	}
@@ -71,9 +71,11 @@ public class ScheMenu {
 		}
 	}
 	// 일정 전체 출력 메소드
-	public void printSchedule() {
-		
-		
+	public void printSchedule(ArrayList<Schedule> list) {
+		if(!list.isEmpty()) {
+		for(Schedule e : list)
+			System.out.println(e);
+		}
 	}
 	// 선택 일정 출력 메소드
 	public void printSchedule(String index) {

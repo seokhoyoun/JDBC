@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.sql.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -20,7 +19,7 @@ public class ScheduleFC implements ISchedule{
 	
 	private Scanner sc = new Scanner(System.in);
 	private HashMap<String,Schedule> hm = new HashMap<>();
-	private ArrayList<String> keys = new ArrayList<String>();
+	private ArrayList<Schedule> list = new ArrayList<>();
 	private ScheduleService ss = new ScheduleService();  
 	
 	
@@ -60,6 +59,11 @@ public class ScheduleFC implements ISchedule{
 	@Override
 	public void delSchedule(String index) {
 //		printSchedule(index);
+		int result = ss.delSchedule(index);
+		if(result > 0)
+			System.out.println("삭제가 완료되었습니다.");
+		else
+			System.out.println("삭제를 실패했습니다.");
 	}
 
 	public void fileSave() {
@@ -92,6 +96,17 @@ public class ScheduleFC implements ISchedule{
 		
 		
 		System.out.println("파일 불러오기 성공");
+	}
+
+
+
+	public ArrayList<Schedule> printSchedule() {
+		list = ss.printSchedule();
+		if(list.isEmpty())
+			System.out.println("현재 저장된 일정정보가 없습니다.");
+		else
+			System.out.println("일정 정보를 불러옵니다...");
+		return list;
 	}
 
 
