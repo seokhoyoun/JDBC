@@ -1,0 +1,7 @@
+CREATE USER schedule IDENTIFIED BY schedule;
+
+GRANT CONNECT,RESOURCE TO schedule;
+
+CREATE USER banksystem IDENTIFIED BY banksystem;
+
+GRANT CONNECT, RESOURCE TO Banksystem;
