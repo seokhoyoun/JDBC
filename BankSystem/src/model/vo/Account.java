@@ -12,6 +12,7 @@ public class Account implements Serializable{
 	private String accNumber; // 계좌번호
 	private String ssN; // 주민번호
 	private int bal; // 잔액
+	private String phone; // 핸드폰번호
 	private String name; // 이름
 	private Date estDate; // 개설일
 	private String id; // 아이디
@@ -20,9 +21,21 @@ public class Account implements Serializable{
 	
 	public Account() {
 	}
+	
+	
+
+	public Account(String ssN, String phone, String name, String id, String password) {
+		super();
+		this.ssN = ssN;
+		this.phone = phone;
+		this.name = name;
+		this.id = id;
+		this.password = password;
+	}
 
 
-	public Account(String accNumber, String ssN, String name, Date estDate, String id, String password, int bal) {
+
+	public Account(String accNumber, String ssN, String name, Date estDate, String id, String password, int bal, String phone) {
 		super();
 		this.accNumber = accNumber;
 		this.ssN = ssN;
@@ -31,6 +44,7 @@ public class Account implements Serializable{
 		this.id = id;
 		this.password = password;
 		this.bal = bal;
+		this.phone = phone;
 	}
 
 
@@ -102,11 +116,22 @@ public class Account implements Serializable{
 		this.bal = bal;
 	}
 
+	
+
+	public String getPhone() {
+		return phone;
+	}
+
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
 
 	@Override
 	public String toString() {
-		return "Account [accNumber=" + accNumber + ", ssN=" + ssN + ", name=" + name + ", estDate=" + estDate + ", id="
-				+ id + ", password=" + password + "]";
+		return accNumber + "\t" + ssN + "\t" + bal + "\t" + phone + "\t" + name + "\t" + estDate + "\t" + id + "\t"
+				+ password;
 	}
 
 

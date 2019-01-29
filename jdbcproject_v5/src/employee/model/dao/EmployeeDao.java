@@ -36,17 +36,9 @@ public class EmployeeDao {
 		HashMap<String, Employee> hm = new HashMap<>(); 
 		
 		// 1. 드라이버 등록
-		Statement stmt = null;
-		ResultSet rset = null;
 		String query = p.getProperty("selectall");
-		try {
-		// 2. 데이터베이스 연결
-//			System.out.println("conn : "+ conn);
-		// 3. 쿼리문 가지고 db에 가서 실행하고나서 결과 가지고 돌아오는 객체 생성
-			stmt = conn.createStatement();
-		// 4. 쿼리문 보내서 실행하고 결과받기
-			rset = stmt.executeQuery(query);
-		// 5. ResultSet에  조회해 온 결과 행들의 컬럼값들을 하나씩 꺼내서 변수|필드에 옮겨 담기
+		try (PreparedStatement stmt = conn.prepareStatement(query);
+				ResultSet rset = stmt.executeQuery()){
 			while(rset.next()) {
 				Employee emp = new Employee();
 				emp.setEmpid(rset.getString("emp_id"));
@@ -69,9 +61,6 @@ public class EmployeeDao {
 			
 		} catch (Exception e) {
 			throw new EmployeeException(e.getMessage());
-		}finally {
-			close(rset);
-			close(stmt);
 		}
 		return hm;
 	}
