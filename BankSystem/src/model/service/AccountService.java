@@ -4,7 +4,7 @@ import java.sql.Connection;
 
 import common.JDBCTemp;
 import model.dao.AccountDao;
-import model.exception.BankException;
+import exception.BankException;
 import model.vo.Account;
 
 public class AccountService {
@@ -23,6 +23,12 @@ public class AccountService {
 	public boolean checkID(String id) {
 		Connection conn = JDBCTemp.getConnection();
 		return ad.checkID(conn, id);
+	}
+
+	public int logIn(String id, String pwd) {
+		Connection conn = JDBCTemp.getConnection();
+		int result = ad.logIn(conn,id,pwd);
+		return 0;
 	}
 
 }

@@ -19,12 +19,23 @@ public class Menu {
 		int mnum = sc.nextInt();
 		switch(mnum) {
 		case 1 : ac.createUser(putData()); break;
-		case 2 : break;
+		case 2 : int result = ac.logIn(putID(),putPwd()); 
+					if(result == 1) userMenu();
+					else if(result == 2) managerMenu();
+					else break;
 		case 3 : return;
 		}
 	}
 	}
 	
+	public void managerMenu() {
+		
+	}
+
+	public void userMenu() {
+		
+	}
+
 	public Account putData() {
 		System.out.print("이름 입력 : ");
 		String name = sc.next();
@@ -51,5 +62,15 @@ public class Menu {
 		
 		return new Account(ssN, phone, name, id, password);
 	}
+	
+	private String putID() {
+		System.out.print("아이디 입력 :");
+		return sc.next();
+	}
+	private String putPwd() {
+		System.out.print("패스워드 입력 : ");
+		return sc.next();
+	}
+	
 	
 }

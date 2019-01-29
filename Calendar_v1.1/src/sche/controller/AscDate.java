@@ -2,11 +2,14 @@ package sche.controller;
 
 import java.util.Comparator;
 
-public class AscDate implements Comparator<String> {
+import sche.model.vo.Schedule;
+
+public class AscDate implements Comparator<Schedule> {
 
 	@Override
-	public int compare(String o1, String o2) {
-		return o1.compareTo(o2);
+	public int compare(Schedule s1, Schedule s2) {
+		return s1.getId().compareTo(s2.getId());
 	}
+
 
 }

@@ -1,22 +1,36 @@
 package sche.model.dao;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import sche.model.vo.Schedule;
 
 public class ScheduleDao {
+	
+	private Properties p = new Properties(); 
+	
+	public ScheduleDao() {
+		try {
+			p.load(new BufferedReader(new FileReader("properties/query.properties")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public int addSchedule(Connection conn, Schedule sd, String index) {
 		int result = 0;
 		StringBuilder sb = new StringBuilder();
 		sb.append(index.substring(0, 4)).append("-").append(index.substring(4, 6)).append("-").append(index.substring(6));
 		sd.setTime(Date.valueOf(sb.toString()));
-		String query = "insert into tb_schedule values ( ?||LPAD( (select count(*) from tb_schedule where s_date = ?)+1 ,2 ,'0'), ? , ? , ? )";
+		String query = p.getProperty("insert");
 			PreparedStatement ps = null;
 			try {
 				ps = conn.prepareStatement(query);
@@ -41,7 +55,7 @@ public class ScheduleDao {
 
 	public int modifySchedule(Connection conn, Schedule schedule, String index) {
 		int result = 0;
-		String query = "update tb_schedule set title = ?, s_content = ? where s_id = ?";
+		String query = p.getProperty("modify");
 		try(PreparedStatement ps = conn.prepareStatement(query)){
 			ps.setString(1, schedule.getTitle());
 			ps.setString(2, schedule.getContent());
@@ -55,7 +69,7 @@ public class ScheduleDao {
 
 	public int delSchedule(Connection conn, String index) {
 		int result = 0;
-		String query = "delete tb_schedule where s_id = ?";
+		String query = p.getProperty("delete");
 		try(PreparedStatement ps = conn.prepareStatement(query)){
 			ps.setString(1, index);
 			result = ps.executeUpdate();
@@ -68,7 +82,7 @@ public class ScheduleDao {
 	public ArrayList<Schedule> printSchedule(Connection conn) {
 		ArrayList<Schedule> list = new ArrayList<>();
 		
-		String query = "select * from tb_schedule";
+		String query = p.getProperty("selectall");
 		try(PreparedStatement ps = conn.prepareStatement(query);
 				ResultSet rs = ps.executeQuery()){
 			while(rs.next()) {

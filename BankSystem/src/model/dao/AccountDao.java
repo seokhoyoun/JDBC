@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import common.JDBCTemp;
-import model.exception.BankException;
+import exception.BankException;
 import model.vo.Account;
 
 public class AccountDao {
@@ -60,6 +60,19 @@ public class AccountDao {
 			JDBCTemp.rollback(conn);
 			throw new BankException(e.getMessage());
 		}
+		return result;
+	}
+	public int logIn(Connection conn, String id, String pwd) {
+		int result = 0;
+		String query = p.getProperty("login");
+		try(PreparedStatement ps = conn.prepareStatement(query);
+				ResultSet rset = ps.executeQuery()){
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
 		return result;
 	}
 	

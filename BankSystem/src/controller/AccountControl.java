@@ -1,6 +1,6 @@
 package controller;
 
-import model.exception.BankException;
+import exception.BankException;
 import model.service.AccountService;
 import model.vo.Account;
 
@@ -20,6 +20,11 @@ public class AccountControl {
 
 	public boolean checkID(String id) {
 		return as.checkID(id);
+	}
+
+	public int logIn(String id, String pwd) {
+		int result = as.logIn(id, pwd);
+		return result;
 	}
 
 	

@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -102,6 +103,7 @@ public class ScheduleFC implements ISchedule{
 
 	public ArrayList<Schedule> printSchedule() {
 		list = ss.printSchedule();
+		list.sort(new AscDate());
 		if(list.isEmpty())
 			System.out.println("현재 저장된 일정정보가 없습니다.");
 		else
