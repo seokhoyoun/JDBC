@@ -46,8 +46,8 @@ public class AccountDao {
 		String query = p.getProperty("createuser");
 		try(PreparedStatement ps = conn.prepareStatement(query)){
 			ps.setString(1, account.getSsN());
-			ps.setString(2, account.getName());
-			ps.setString(3, account.getPhone());
+			ps.setString(2, account.getPhone());
+			ps.setString(3, account.getName());
 			ps.setString(4, account.getId());
 			ps.setString(5, account.getPassword());
 			result = ps.executeUpdate();
@@ -62,18 +62,39 @@ public class AccountDao {
 		}
 		return result;
 	}
-	public int logIn(Connection conn, String id, String pwd) {
-		int result = 0;
+	public Account logIn(Connection conn, String id, String pwd)  {
+		Account acc = null;
 		String query = p.getProperty("login");
-		try(PreparedStatement ps = conn.prepareStatement(query);
+		try(PreparedStatement ps = CreatePS(conn, id, pwd, query);
 				ResultSet rset = ps.executeQuery()){
-			
+			if(rset.next()) {
+				acc = new Account();
+				acc.setAccNumber(rset.getString("acc_number"));
+				acc.setSsN(rset.getString("ssn"));
+				acc.setBal(rset.getInt("bal"));
+				acc.setPhone(rset.getString("phone"));
+				acc.setName(rset.getString("u_name"));
+				acc.setEstDate(rset.getDate("estdate"));
+				acc.setId(rset.getString("id"));
+				acc.setPassword(rset.getString("password"));
+			}
+			else
+				System.out.println("아이디와 비밀번호가 일치하지 않습니다.");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		
-		return result;
+		return acc;
+	}
+	private PreparedStatement CreatePS(Connection conn, String id, String pwd, String query) throws SQLException {
+		PreparedStatement ps = conn.prepareStatement(query);
+		ps.setString(1, id);
+		ps.setString(2, pwd);
+		return ps;
+	}
+	public Account deposit(Connection conn, Account acc) {
+		String query = 
+		return null;
 	}
 	
 	

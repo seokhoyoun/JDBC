@@ -25,10 +25,18 @@ public class AccountService {
 		return ad.checkID(conn, id);
 	}
 
-	public int logIn(String id, String pwd) {
+	public Account logIn(String id, String pwd) throws BankException {
 		Connection conn = JDBCTemp.getConnection();
-		int result = ad.logIn(conn,id,pwd);
-		return 0;
+		Account acc = ad.logIn(conn,id,pwd);
+		return acc;
 	}
+
+	public Account deposit(Account acc) {
+		Connection conn = JDBCTemp.getConnection();
+		acc = ad.deposit(conn, acc);
+		return acc;
+	}
+
+	
 
 }

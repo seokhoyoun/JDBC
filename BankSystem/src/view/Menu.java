@@ -19,20 +19,41 @@ public class Menu {
 		int mnum = sc.nextInt();
 		switch(mnum) {
 		case 1 : ac.createUser(putData()); break;
-		case 2 : int result = ac.logIn(putID(),putPwd()); 
-					if(result == 1) userMenu();
-					else if(result == 2) managerMenu();
+		case 2 : Account acc = ac.logIn(putID(),putPwd()); 
+					if(Integer.parseInt(acc.getAccNumber()) > 1) userMenu(acc);
+					else if(Integer.parseInt(acc.getAccNumber()) == 1) managerMenu(acc);
 					else break;
 		case 3 : return;
 		}
 	}
 	}
 	
-	public void managerMenu() {
-		
+	private void managerMenu(Account acc) {
+		System.out.println("관리자 메뉴 접속...");
 	}
 
-	public void userMenu() {
+	private void userMenu(Account acc) {
+		System.out.println("\n사용자 메뉴 접속중...");
+		while(true) {
+			System.out.print("\n=================\n"
+					+ "1. 내 계좌 조회 \n"
+					+ "2. 입금하기 \n"
+					+ "3. 출금하기 \n"
+					+ "4. 송금하기 \n"
+					+ "5. 거래내역 조회 \n"
+					+ "6. 메인메뉴로 돌아가기 \n"
+					+ "번호 선택 : ");
+			int mnum = sc.nextInt();
+			
+			switch(mnum) {
+			case 1 : printAcc(acc); break;
+			case 2 : acc = ac.deposit(acc, howMuch(2)); break;
+			case 3 : break;
+			case 4 : break;
+			case 5 : break;
+			case 6 : mainMenu();
+			}
+		}
 		
 	}
 
@@ -63,6 +84,15 @@ public class Menu {
 		return new Account(ssN, phone, name, id, password);
 	}
 	
+	private int howMuch(int num) {
+		switch(num) {
+		case 2 : System.out.print("입금하실 금액을 입력하세요 : "); break;
+		case 3 : System.out.print("출금하실 금액을 입력하세요 : "); break;
+		case 4 : System.out.print("송금하실 금액을 입력하세요 : "); break;
+		}
+		return sc.nextInt();
+	}
+	
 	private String putID() {
 		System.out.print("아이디 입력 :");
 		return sc.next();
@@ -72,5 +102,10 @@ public class Menu {
 		return sc.next();
 	}
 	
+	private void printAcc(Account acc) {
+		System.out.println("\n계좌번호 \t\t이름 \t잔액 \t개설날짜");
+		System.out.println("==================================================");
+		System.out.println(acc.getAccNumber()+"\t"+acc.getName()+"\t"+acc.getBal()+"원\t"+acc.getEstDate());
+	}
 	
 }

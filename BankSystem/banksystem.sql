@@ -50,6 +50,6 @@ COMMENT ON COLUMN BANK_LOG.WITHDRAW IS '출금액';
 COMMENT ON COLUMN BANK_LOG.USER_COMMENT IS '메세지';
 
 COMMIT;
-
+delete from user_account;
 select id from user_account where id = 'tjrghekt' and password = '1234';
 
