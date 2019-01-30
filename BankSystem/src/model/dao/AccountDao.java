@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import common.JDBCTemp;
+import static common.JDBCTemp.*;
 import exception.BankException;
 import model.vo.Account;
 
@@ -52,12 +52,12 @@ public class AccountDao {
 			ps.setString(5, account.getPassword());
 			result = ps.executeUpdate();
 			if(result <= 0) {
-				JDBCTemp.rollback(conn);
+				rollback(conn);
 				throw new BankException("계정 생성에 실패했습니다.");
 			}
 			
 		} catch (SQLException e) {
-			JDBCTemp.rollback(conn);
+			rollback(conn);
 			throw new BankException(e.getMessage());
 		}
 		return result;
@@ -92,8 +92,25 @@ public class AccountDao {
 		ps.setString(2, pwd);
 		return ps;
 	}
-	public Account deposit(Connection conn, Account acc) {
-		return null;
+	public int deposit(Connection conn, Account acc) throws BankException {
+		int result = 0;
+		try(PreparedStatement ps = conn.prepareStatement(p.getProperty("deposit"))){
+			ps.setInt(1, acc.getBal());
+			ps.setString(2, acc.getId());
+			result = ps.executeUpdate();
+			if(result <= 0) {
+				rollback(conn);
+				throw new BankException("해당 계좌에 입금할 수 없습니다.");
+			}
+		} catch (SQLException e) {
+			rollback(conn);
+			throw new BankException(e.getMessage());
+		}
+		return result;
+	}
+	public int withdraw(Connection conn, Account acc) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 	

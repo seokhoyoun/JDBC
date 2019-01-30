@@ -3,11 +3,18 @@ package view;
 import java.util.Scanner;
 
 import controller.AccountControl;
+import controller.LogControl;
 import model.vo.Account;
 
 public class Menu {
 	private Scanner sc = new Scanner(System.in);
-	private AccountControl ac = new AccountControl(); 
+	private AccountControl ac;
+	private LogControl lc;
+	
+	public Menu() {
+		ac = new AccountControl();
+		lc = new LogControl(); 
+	}
 	
 	public void mainMenu() {
 		while(true) {
@@ -19,7 +26,8 @@ public class Menu {
 		int mnum = sc.nextInt();
 		switch(mnum) {
 		case 1 : ac.createUser(putData()); break;
-		case 2 : Account acc = ac.logIn(putID(),putPwd()); 
+		case 2 : Account acc = ac.logIn(putID(),putPwd());
+					if(acc == null) {System.out.println("로그인 실패"); break;}
 					if(Integer.parseInt(acc.getAccNumber()) > 1) userMenu(acc);
 					else if(Integer.parseInt(acc.getAccNumber()) == 1) managerMenu(acc);
 					else break;
@@ -47,8 +55,8 @@ public class Menu {
 			
 			switch(mnum) {
 			case 1 : printAcc(acc); break;
-			case 2 : acc = ac.deposit(acc, howMuch(2)); break;
-			case 3 : break;
+			case 2 : ac.deposit(acc, howMuch(2));  break;
+			case 3 : ac.withdraw(acc, howMuch(3)); break;
 			case 4 : break;
 			case 5 : break;
 			case 6 : mainMenu();

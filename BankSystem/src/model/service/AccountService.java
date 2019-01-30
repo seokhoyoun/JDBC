@@ -2,7 +2,7 @@ package model.service;
 
 import java.sql.Connection;
 
-import common.JDBCTemp;
+import static common.JDBCTemp.*;
 import model.dao.AccountDao;
 import exception.BankException;
 import model.vo.Account;
@@ -12,29 +12,38 @@ public class AccountService {
 	private AccountDao ad = new AccountDao();
 
 	public int createUser(Account account) throws BankException {
-		Connection conn = JDBCTemp.getConnection();
+		Connection conn = getConnection();
 		int result = ad.createUser(conn, account);
 		if(result > 0)
-			JDBCTemp.commit(conn);
-		JDBCTemp.rollback(conn);
+			commit(conn);
+		close(conn);
 		return result;
 	}
 
 	public boolean checkID(String id) {
-		Connection conn = JDBCTemp.getConnection();
+		Connection conn = getConnection();
 		return ad.checkID(conn, id);
 	}
 
 	public Account logIn(String id, String pwd) throws BankException {
-		Connection conn = JDBCTemp.getConnection();
+		Connection conn = getConnection();
 		Account acc = ad.logIn(conn,id,pwd);
 		return acc;
 	}
 
-	public Account deposit(Account acc) {
-		Connection conn = JDBCTemp.getConnection();
-		acc = ad.deposit(conn, acc);
-		return acc;
+	public int deposit(Account acc) throws BankException {
+		Connection conn = getConnection();
+		int result = ad.deposit(conn, acc);
+		if(result > 0)
+			commit(conn);
+		close(conn);
+		return result;
+	}
+
+	public int withdraw(Account acc) {
+		Connection conn = getConnection();
+		int result = ad.withdraw(conn, acc);
+		return 0;
 	}
 
 	
