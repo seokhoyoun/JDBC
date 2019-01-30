@@ -35,6 +35,7 @@ public class ProductView {
 	}
 
 	public void displayList(List<Product> list) {
+		if(list == null) return;
 		for(Product e : list)
 			System.out.println(e);
 	}
