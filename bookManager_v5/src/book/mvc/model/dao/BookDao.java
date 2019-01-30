@@ -1,176 +1,329 @@
 package book.mvc.model.dao;
 
+import static common.JDBCTemp.close;
+import static common.JDBCTemp.rollback;
+
 import java.io.FileReader;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Properties;
 
-import book.mvc.exception.BookException;
+import book.exception.BookException;
 import book.mvc.model.vo.Book;
-import common.JDBCTemp;
 
 public class BookDao {
-	
-	Properties p = new Properties();
+	private Properties prop = new Properties();
 	
 	public BookDao() throws BookException {
+		try {			
+			prop.load(new FileReader(
+					"properties/query.properties"));
+		} catch (Exception e) {
+			throw new BookException(e.getMessage());
+		}
+	}
+	
+	public int insertBook(Connection conn, Book book) 
+			throws BookException {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		String query = prop.getProperty("insert");
+		
 		try {
-			p.load(new FileReader("prop/query.properties"));
-		} catch (IOException e) {
-			throw new BookException(e.getMessage());
-		}
-	}
-
-	public int insertBook(Connection conn, Book book) throws BookException {
-		int result = 0;
-		String query = p.getProperty("insert");
-		try(PreparedStatement ps = conn.prepareStatement(query)){
-			/*BOOK_ID	NUMBER
-			TITLE	VARCHAR2(50 BYTE)
-			AUTHOR	VARCHAR2(20 BYTE)
-			PUBLISHER	VARCHAR2(20 BYTE)
-			PUBLISH_DATE	DATE
-			PRICE	NUMBER*/
-			ps.setString(1, book.getTitle());
-			ps.setString(2, book.getAuthor());
-			ps.setString(3, book.getPublisher());
-			ps.setDate(4, book.getDate());
-			ps.setInt(5, book.getPrice());
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, book.getTitle());
+			pstmt.setString(2, book.getAuthor());
+			pstmt.setString(3, book.getPublisher());
+			pstmt.setDate(4, book.getPublishDate());
+			pstmt.setInt(5, book.getPrice());
 			
-			result = ps.executeUpdate();
+			result = pstmt.executeUpdate();
+			
 			if(result <= 0) {
-				JDBCTemp.rollback(conn);
-				throw new BookException("도서 정보 저장에 실패했습니다.");
+				rollback(conn);
+				throw new BookException("새로운 도서정보 기록 실패!");
 			}
 			
 		} catch (Exception e) {
-			JDBCTemp.rollback(conn);
+			rollback(conn);
 			throw new BookException(e.getMessage());
-		}
-		return result;
-	}
-
-	public int updateBook(Connection conn, Book book) throws BookException {
-		int result = 0;
-		String query = p.getProperty("update");
-		try(PreparedStatement ps = conn.prepareStatement(query)){
-			ps.setInt(1, book.getPrice());
-			ps.setInt(2, book.getBid());
-				result = ps.executeUpdate();
-			
-			if(result <= 0) {
-				JDBCTemp.rollback(conn);
-				throw new BookException(book.getBid()+"의 도서 정보 수정에 실패하였습니다.");
-			}
-		} catch (Exception e) {
-			JDBCTemp.rollback(conn);
-			throw new BookException(e.getMessage());
+		}finally {
+			close(pstmt);
 		}
 		
 		return result;
 	}
-
-	public int deleteBook(Connection conn, int bid) throws BookException {
+	
+	public int updateBook(Connection conn, Book book) 
+			throws BookException {
 		int result = 0;
-		String query = p.getProperty("delete");
-		try(PreparedStatement ps = conn.prepareStatement(query)){
-			ps.setInt(1, bid);
-			result = ps.executeUpdate();
+		PreparedStatement pstmt = null;
+		
+		String query = prop.getProperty("update");
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, book.getPrice());
+			pstmt.setInt(2, book.getBookId());
+			
+			result = pstmt.executeUpdate();
+			
 			if(result <= 0) {
-				JDBCTemp.rollback(conn);
-				throw new BookException(bid+"번 도서 삭제를 실패했습니다.");
+				rollback(conn);
+				throw new BookException(book.getBookId() + "번 도서정보 변경 실패!");
 			}
+			
 		} catch (Exception e) {
-			JDBCTemp.rollback(conn);
+			rollback(conn);
 			throw new BookException(e.getMessage());
+		}finally {
+			close(pstmt);
 		}
 		
 		return result;
 	}
-
-	public Book selectBook(Connection conn, int bid) throws BookException {
-		Book b = null;
-		String query = p.getProperty("selectbid");
-		try(PreparedStatement ps = conn.prepareStatement(query)){
-			ps.setInt(1, bid);
-			try(ResultSet rset = ps.executeQuery()){
+	
+	public int deleteBook(Connection conn, int bookId)
+			throws BookException {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		String query = prop.getProperty("delete");
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, bookId);
+			
+			result = pstmt.executeUpdate();
+			
+			if(result <= 0) {
+				rollback(conn);
+				throw new BookException(bookId + "번 도서정보 삭제 실패!");
+			}
+		} catch (Exception e) {
+			rollback(conn);
+			throw new BookException(e.getMessage());
+		}finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+	
+	public ArrayList<Book> selectList(Connection conn)
+			throws BookException {
+		ArrayList<Book> bookList = new ArrayList<Book>();
+		Statement stmt = null;
+		ResultSet rset = null;
+		
+		String query = prop.getProperty("selectAll");
+		
+		try {
+			stmt = conn.createStatement();
+			rset = stmt.executeQuery(query);
+			
+			while(rset.next()) {
+				Book b = new Book();
 				
-			if(rset.next()) {
-				b = new Book();
-				b.setBid(rset.getInt("book_id"));
+				b.setBookId(rset.getInt("book_id"));
 				b.setTitle(rset.getString("title"));
 				b.setAuthor(rset.getString("author"));
 				b.setPublisher(rset.getString("publisher"));
-				b.setDate(rset.getDate("publish_date"));
+				b.setPublishDate(rset.getDate("publish_date"));
 				b.setPrice(rset.getInt("price"));
+				
+				bookList.add(b);
 			}
-			}
-			if(b == null)
-				throw new BookException(bid+"번 도서 정보 조회를 실패했습니다.");
-		} catch (Exception e) {
-			throw new BookException(e.getMessage());
-		}
-		return b;
-	}
-
-	public ArrayList<Book> searchBookTitle(Connection conn, String title) throws BookException {
-		ArrayList<Book> list = new ArrayList<>();
-		String query = p.getProperty("selectbooktitle");
-		try(PreparedStatement ps = createPS(conn, title, query);
-				ResultSet rset = ps.executeQuery()){
-			while(rset.next()) {
-				Book b = new Book();
-				b.setBid(rset.getInt("book_id"));
-				b.setTitle(rset.getString("title"));
-				b.setAuthor(rset.getString("author"));
-				b.setPublisher(rset.getString("publisher"));
-				b.setDate(rset.getDate("publish_date"));
-				b.setPrice(rset.getInt("price"));
-				list.add(b);
-			}
-			if(list.isEmpty()) 
-				throw new BookException(title+"의 도서 조회 결과가 없습니다.");
 			
+			if(bookList.size() == 0) {
+				throw new BookException("조회된 도서정보가 없습니다.");
+			}
 		} catch (Exception e) {
 			throw new BookException(e.getMessage());
+		}finally {
+			close(rset);
+			close(stmt);
 		}
 		
-		return list;
+		return bookList;
 	}
-
-	private PreparedStatement createPS(Connection conn, String title, String query) throws SQLException {
-		PreparedStatement ps = conn.prepareStatement(query);
-		ps.setString(1, "%"+title+"%");
-		return ps;
-	}
-
-	public ArrayList<Book> selectAllBooks(Connection conn) throws BookException {
-		ArrayList<Book> list = new ArrayList<>();
-		String query = p.getProperty("selectall");
-		try(Statement stmt = conn.createStatement();
-				ResultSet rset = stmt.executeQuery(query)){
+	
+	public HashMap<Integer, Book> selectMap(Connection conn) 
+			throws BookException {
+		HashMap<Integer, Book> bookMap = 
+				new HashMap<Integer, Book>();
+		Statement stmt = null;
+		ResultSet rset = null;
+		
+		String query = prop.getProperty("selectAll");
+		
+		try {
+			stmt = conn.createStatement();
+			rset = stmt.executeQuery(query);
+			
 			while(rset.next()) {
 				Book b = new Book();
-				b.setBid(rset.getInt("book_id"));
+				
+				b.setBookId(rset.getInt("book_id"));
 				b.setTitle(rset.getString("title"));
 				b.setAuthor(rset.getString("author"));
 				b.setPublisher(rset.getString("publisher"));
-				b.setDate(rset.getDate("publish_date"));
+				b.setPublishDate(rset.getDate("publish_date"));
 				b.setPrice(rset.getInt("price"));
-				list.add(b);
+				
+				bookMap.put(b.getBookId(), b);
 			}
-			if(list.isEmpty()) 
-				throw new BookException("전체 도서 목록 조회 실패");
+			
+			if(bookMap.size() == 0) {
+				throw new BookException("조회된 도서정보가 없습니다.");
+			}
 			
 		} catch (Exception e) {
 			throw new BookException(e.getMessage());
-		}
-		return list;
+		}finally {
+			close(rset);
+			close(stmt);
+		}		
+		
+		return bookMap;
 	}
-
+	
+	public ArrayList<Book> selectTitleList(
+			Connection conn, String title) 
+					throws BookException {
+		ArrayList<Book> bookList = new ArrayList<Book>();
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String query = prop.getProperty("selectTitle");
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, "%" + title + "%");
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				Book b = new Book();
+				
+				b.setBookId(rset.getInt("book_id"));
+				b.setTitle(rset.getString("title"));
+				b.setAuthor(rset.getString("author"));
+				b.setPublisher(rset.getString("publisher"));
+				b.setPublishDate(rset.getDate("publish_date"));
+				b.setPrice(rset.getInt("price"));
+				
+				bookList.add(b);
+			}
+			
+			if(bookList.size() == 0) {
+				throw new BookException(title + 
+						"과 일치하는 도서정보가 없습니다.");
+			}
+		} catch (Exception e) {
+			throw new BookException(e.getMessage());
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return bookList;
+	}
+	
+	public HashMap<Integer, Book> selectTitleMap(
+			Connection conn, String title) 
+					throws BookException {
+		HashMap<Integer, Book> bookMap = 
+				new HashMap<Integer, Book>();
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String query = prop.getProperty("selectTitle");
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, "%" + title + "%");
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				Book b = new Book();
+				
+				b.setBookId(rset.getInt("book_id"));
+				b.setTitle(rset.getString("title"));
+				b.setAuthor(rset.getString("author"));
+				b.setPublisher(rset.getString("publisher"));
+				b.setPublishDate(rset.getDate("publish_date"));
+				b.setPrice(rset.getInt("price"));
+				
+				bookMap.put(b.getBookId(), b);
+			}
+			
+			if(bookMap.size() == 0) {
+				throw new BookException(title + 
+						"과 일치하는 도서정보가 없습니다.");
+			}
+			
+		} catch (Exception e) {
+			throw new BookException(e.getMessage());
+		}finally {
+			close(rset);
+			close(pstmt);
+		}		
+		
+		return bookMap;
+	}
+	
+	public Book selectBook(Connection conn, int bookId) 
+			throws BookException {
+		Book book = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String query = prop.getProperty("selectOne");
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, bookId);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				book = new Book();
+				
+				book.setBookId(rset.getInt("book_id"));
+				book.setTitle(rset.getString("title"));
+				book.setAuthor(rset.getString("author"));
+				book.setPublisher(rset.getString("publisher"));
+				book.setPublishDate(rset.getDate("publish_date"));
+				book.setPrice(rset.getInt("price"));
+				
+			}
+			
+			if(book == null) {
+				throw new BookException(bookId + 
+						"번 도서정보가 없습니다.");
+			}
+			
+		} catch (Exception e) {
+			throw new BookException(e.getMessage());
+		}finally {
+			close(rset);
+			close(pstmt);
+		}		
+		
+		return book;
+	}
 }
+
+
+
+
+
+
+

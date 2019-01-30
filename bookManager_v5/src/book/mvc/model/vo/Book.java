@@ -2,33 +2,34 @@ package book.mvc.model.vo;
 
 import java.sql.Date;
 
-public class Book {
-	private int bid;
+public class Book implements java.io.Serializable {
+	private static final long serialVersionUID = 2L;
+	
+	private int bookId;
 	private String title;
 	private String author;
 	private String publisher;
-	private Date date;
+	private Date publishDate;
 	private int price;
 	
-	public Book() {
-	}
+	public Book() {}
 
-	public Book(int bid, String title, String author, String publisher, Date date, int price) {
+	public Book(int bookId, String title, String author, String publisher, Date publishDate, int price) {
 		super();
-		this.bid = bid;
+		this.bookId = bookId;
 		this.title = title;
 		this.author = author;
 		this.publisher = publisher;
-		this.date = date;
+		this.publishDate = publishDate;
 		this.price = price;
 	}
 
-	public int getBid() {
-		return bid;
+	public int getBookId() {
+		return bookId;
 	}
 
-	public void setBid(int bid) {
-		this.bid = bid;
+	public void setBookId(int bookId) {
+		this.bookId = bookId;
 	}
 
 	public String getTitle() {
@@ -55,12 +56,12 @@ public class Book {
 		this.publisher = publisher;
 	}
 
-	public Date getDate() {
-		return date;
+	public Date getPublishDate() {
+		return publishDate;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setPublishDate(Date publishDate) {
+		this.publishDate = publishDate;
 	}
 
 	public int getPrice() {
@@ -71,10 +72,22 @@ public class Book {
 		this.price = price;
 	}
 
-	@Override
-	public String toString() {
-		return bid + "\t" + title + "\t" + author + "\t" + publisher + "\t" + date + "\t" + price;
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return bookId + ", " + title + ", " + author
+			+ ", " + publisher + ", " + publishDate
+			+ ", " + price;
+	}
 }
+
+
+
+
+
+
+
+

@@ -1,95 +1,119 @@
 package book.mvc.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-import book.mvc.exception.BookException;
+import book.exception.BookException;
 import book.mvc.model.service.BookService;
 import book.mvc.model.vo.Book;
 import book.mvc.view.BookMenu;
-import common.JDBCTemp;
 
 public class BookController {
-	
-	private BookService bs;
-	
-	public BookController() {
+	private BookService bservice;
+
+	public BookController() {		
 		try {
-			bs = new BookService();
+			bservice = new BookService();
 		} catch (BookException e) {
-			new BookMenu().displayError(e.getMessage());
+			printError(e.getMessage());			
 		}
 	}
-	
 
-	
+	private void printError(String message) {
+		System.out.println("\n프로그램 오류 발생!");
+		System.out.println("시스템 관리자에게 문의하십시요.");
+		System.out.println("오류 메세지 : " + message);
+	}
+
 	public void insertBook(Book book) {
+		
 		try {
-			int result = bs.insertBook(book);
-			if(result > 0)
-				System.out.println("\n도서 추가 완료");
+			if(bservice.insert(book) > 0)
+				System.out.println("새 도서 등록 성공!");
+				
 		} catch (BookException e) {
-			new BookMenu().displayError(e.getMessage());
+			printError(e.getMessage());			
 		}
 	}
 
 	public void updateBook(Book book) {
-		try {
-			int result = bs.updateBook(book);
-			if(result > 0) 
-				System.out.println("\n가격 수정 완료");
-		} catch (BookException e) {
-			new BookMenu().displayError(e.getMessage());
-		}
 		
-	}
-
-	public void deleteBook(int bid) {
 		try {
-			int result = bs.deleteBook(bid);
-			if(result > 0)
-				System.out.println("\n도서 정보 삭제 완료");
+			if(bservice.update(book) > 0)
+				System.out.println("도서 정보 변경 성공!");
 		} catch (BookException e) {
-			new BookMenu().displayError("도서 정보 삭제를 실패했습니다.");
+			printError(e.getMessage());			
 		}
 	}
 
-	public Book searchBook(int bid) {
-		Book emp = null;
+	public void deleteBook(int bookId) {
+		
 		try {
-			emp = bs.searchBook(bid);
-			if(emp == null) 
-				new BookMenu().displayError("조회 된 도서 정보가 없습니다.");
+			if(bservice.delete(bookId) > 0)
+				System.out.println("도서 정보 삭제 성공!");
 		} catch (BookException e) {
-			new BookMenu().displayError(e.getMessage());
+			printError(e.getMessage());			
 		}
-		return emp;
+	}
+
+	public void searchBook(int bookId) {
+		
+		try {
+			Book book = bservice.selectBook(bookId);
+			new BookMenu().printBook(book);
+			if(book != null)
+				System.out.println("도서 정보 조회 성공!");
 			
-		
-	}
-
-	public ArrayList<Book> searchBookTitle(String title) {
-		ArrayList<Book> list = null;
-		try {
-			list = bs.searchBookTitle(title);
-			if(list.isEmpty()) 
-				new BookMenu().displayError("조회된 도서 정보가 없습니다.");
 		} catch (BookException e) {
-			new BookMenu().displayError(e.getMessage());
+			printError(e.getMessage());			
 		}
-		return list;
+	}
+
+	public void searchBookList(String title) {
 		
-	}
-
-	public ArrayList<Book> selectAll() {
-		ArrayList<Book> list = null;
 		try {
-			list = bs.selectAll();
-			if(list.isEmpty())
-				new BookMenu().displayError("조회된 도서 정보가 없습니다.");
+			ArrayList<Book> bookList = 
+					bservice.selectTitleList(title);
+			new BookMenu().printList(bookList);
+			
+			if(bookList.size() > 0)
+				System.out.println("\n제목으로 조회 성공!");
+			
 		} catch (BookException e) {
-			new BookMenu().displayError(e.getMessage());
+			printError(e.getMessage());			
 		}
-		return list;
 	}
 
+	public void searchBookMap(String title) {
+		
+		try {
+			HashMap<Integer, Book> bookMap = 
+					bservice.selectTitleMap(title);
+			new BookMenu().printMap(bookMap);
+			
+			if(bookMap.size() > 0)
+				System.out.println("\n제목으로 조회 성공!");
+		} catch (BookException e) {
+			printError(e.getMessage());			
+		}
+	}
+
+	public void selectAllList() {
+		
+		try {
+			new BookMenu().printList(bservice.selectList());
+			
+		} catch (BookException e) {
+			printError(e.getMessage());			
+		}
+	}
+
+	public void selectAllMap() {		
+		try {
+			new BookMenu().printMap(bservice.selectMap());
+			
+		} catch (BookException e) {
+			printError(e.getMessage());			
+		}
+	}
 }

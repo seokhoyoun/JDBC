@@ -1,78 +1,84 @@
 package common;
 
-import java.io.FileReader;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Properties;
-
-import book.mvc.view.BookMenu;
+import java.sql.*;
+import book.exception.*;
+import java.util.*;
+import java.io.*;
 
 public class JDBCTemp {
 
-	public static Connection getConnection() {
+	public static Connection getConnection() throws BookException {
 		Connection conn = null;
-		Properties p = new Properties();
+		Properties prop = new Properties();
+
 		try {
-			p.load(new FileReader("prop/driver.properties"));
-			Class.forName(p.getProperty("driver"));
-			conn = DriverManager.getConnection(p.getProperty("url"), p.getProperty("user"), p.getProperty("pwd"));
-			conn.setAutoCommit(false);
-			if(conn == null)
-				new BookMenu().displayError("DB 연결 실패");
+			prop.load(new FileReader("properties/driver.properties"));
+
+			/*
+			 * String driver = prop.getProperty("driver"); String url =
+			 * prop.getProperty("url"); String user = prop.getProperty("user"); String pwd =
+			 * prop.getProperty("pwd");
+			 * 
+			 * Class.forName(driver); conn = DriverManager.getConnection(url, user, pwd);
+			 */
+
+			Class.forName(prop.getProperty("driver"));
+			conn = DriverManager.getConnection(
+					prop.getProperty("url"), 
+					prop.getProperty("user"),
+					prop.getProperty("pwd"));
+			
+			conn.setAutoCommit(false);			
+
 		} catch (Exception e) {
-			new BookMenu().displayError(e.getMessage());
+			throw new BookException(e.getMessage());
 		}
+
 		return conn;
 	}
-	
-	public static void close(Connection conn) {
+
+	public static void close(Connection conn) throws BookException {
 		try {
 			if(conn != null && !conn.isClosed())
 				conn.close();
-			} catch (SQLException e) {
-				new BookMenu().displayError(e.getMessage());
-			}
+		} catch (Exception e) {
+			throw new BookException(e.getMessage());
+		}
 	}
-	
-	public static void close(Statement stmt) {
+
+	public static void close(Statement stmt) throws BookException {
 		try {
 			if(stmt != null && !stmt.isClosed())
 				stmt.close();
-			} catch (SQLException e) {
-				new BookMenu().displayError(e.getMessage());
-			}
+		} catch (Exception e) {
+			throw new BookException(e.getMessage());
+		}
 	}
-	
-	public static void close(ResultSet rset) {
-			try {
-				if(rset != null && !rset.isClosed())
+
+	public static void close(ResultSet rset) throws BookException {
+		try {
+			if(rset != null && !rset.isClosed())
 				rset.close();
-			} catch (SQLException e) {
-				new BookMenu().displayError(e.getMessage());
-			}
+		} catch (Exception e) {
+			throw new BookException(e.getMessage());
+		}
 	}
-	
-	public static void commit(Connection conn) {
+
+	public static void commit(Connection conn) throws BookException {
 		try {
 			if(conn != null && !conn.isClosed())
 				conn.commit();
-			} catch (SQLException e) {
-				new BookMenu().displayError(e.getMessage());
-			}
+		} catch (Exception e) {
+			throw new BookException(e.getMessage());
+		}
 	}
-	
-	public static void rollback(Connection conn) {
+
+	public static void rollback(Connection conn) throws BookException {
 		try {
 			if(conn != null && !conn.isClosed())
 				conn.rollback();
-			} catch (SQLException e) {
-				new BookMenu().displayError(e.getMessage());
-			}
-		
+		} catch (Exception e) {
+			throw new BookException(e.getMessage());
+		}
 	}
-	
-	
 }

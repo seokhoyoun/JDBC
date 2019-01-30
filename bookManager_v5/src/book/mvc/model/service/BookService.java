@@ -1,77 +1,98 @@
 package book.mvc.model.service;
 
+import static common.JDBCTemp.*;
+
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-import book.mvc.exception.BookException;
+import book.exception.BookException;
 import book.mvc.model.dao.BookDao;
 import book.mvc.model.vo.Book;
-import common.JDBCTemp;
+
 public class BookService {
-	
-	private BookDao dao;
+	private BookDao bdao;	
 	
 	public BookService() throws BookException {
-		 dao = new BookDao();
+		bdao = new BookDao();
 	}
 	
-	public int insertBook(Book book) throws BookException {
-		Connection conn = JDBCTemp.getConnection();
-		int result = dao.insertBook(conn, book);
+	public int insert(Book book) 
+			throws BookException {
+		Connection conn = getConnection();
+		int result = bdao.insertBook(conn, book);
 		if(result > 0)
-			JDBCTemp.commit(conn);
-		JDBCTemp.close(conn);
+			commit(conn);
+		close(conn);
 		return result;
 	}
-
-	public int updateBook(Book book) throws BookException {
-		Connection conn = JDBCTemp.getConnection();
-		int result = dao.updateBook(conn, book);
-		if(result > 0)
-			JDBCTemp.commit(conn);
-		JDBCTemp.close(conn);
-		return result;
-		
-	}
-
-	public int deleteBook(int bid) throws BookException {
-		Connection conn = JDBCTemp.getConnection();
-		int result = dao.deleteBook(conn, bid);
-		if(result > 0)
-			JDBCTemp.commit(conn);
-		JDBCTemp.close(conn);
-		return result;
-	}
-
-	public Book searchBook(int bid) throws BookException {
-		Book book = new Book();
-		Connection conn = JDBCTemp.getConnection();
-		book = dao.selectBook(conn, bid);
-		
-		return book;	
-			
-		
-	}
-
-	public ArrayList<Book> searchBookTitle(String title) throws BookException {
-		ArrayList<Book> list = new ArrayList<>();
-		Connection conn = JDBCTemp.getConnection();
-		list = dao.searchBookTitle(conn, title);
-		return list;
-		
-	}
-
-	public ArrayList<Book> selectAll() throws BookException {
-		ArrayList<Book> list = new ArrayList<>();
-		Connection conn = JDBCTemp.getConnection();
-		list = dao.selectAllBooks(conn);
-		return list;
-	}
-
-	public Book selectBook(int bid) {
-		Book book = new Book();
-		return null;
-	}
-
 	
+	public int update(Book book) 
+			throws BookException {
+		Connection conn = getConnection();
+		int result = bdao.updateBook(conn, book);
+		if(result > 0)
+			commit(conn);
+		close(conn);
+		return result;
+	}
+	
+	public int delete(int bookId) 
+			throws BookException  {
+		Connection conn = getConnection();
+		int result = bdao.deleteBook(conn, bookId);
+		if(result > 0)
+			commit(conn);
+		close(conn);
+		return result;
+	}
+	
+	public ArrayList<Book> selectList() 
+			throws BookException  {
+		Connection conn = getConnection();
+		ArrayList<Book> bookList = bdao.selectList(conn);
+		close(conn);
+		return bookList;
+	}
+	
+	public HashMap<Integer, Book> selectMap() 
+			throws BookException  {
+		Connection conn = getConnection();
+		HashMap<Integer, Book> bookMap = bdao.selectMap(conn);
+		close(conn);
+		return bookMap;
+	}
+	
+	public ArrayList<Book> selectTitleList(String title) 
+			throws BookException  {
+		Connection conn = getConnection();
+		ArrayList<Book> bookList = bdao.selectTitleList(conn, title);
+		close(conn);
+		return bookList;
+	}
+	
+	public HashMap<Integer, Book> selectTitleMap(String title) 
+			throws BookException  {
+		Connection conn = getConnection();
+		HashMap<Integer, Book> bookMap = bdao.selectTitleMap(conn, title);
+		close(conn);
+		return bookMap;
+	}
+	
+	public Book selectBook(int bookId) 
+			throws BookException  {
+		Connection conn = getConnection();
+		Book book = bdao.selectBook(conn, bookId);
+		close(conn);
+		return book;
+	}
 }
+
+
+
+
+
+
+
+
+
