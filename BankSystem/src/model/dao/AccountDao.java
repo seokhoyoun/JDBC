@@ -108,9 +108,45 @@ public class AccountDao {
 		}
 		return result;
 	}
-	public int withdraw(Connection conn, Account acc) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int withdraw(Connection conn, Account acc) throws BankException {
+		int result = 0;
+		try(PreparedStatement ps = conn.prepareStatement(p.getProperty("withdraw"))){
+			ps.setInt(1, acc.getBal());
+			ps.setString(2, acc.getId());
+			result = ps.executeUpdate();
+			if(result <= 0) {
+				rollback(conn);
+				throw new BankException("해당 계좌에 출금할 수 없습니다.");
+			}
+		} catch (SQLException e) {
+			rollback(conn);
+			throw new BankException(e.getMessage());
+		}
+		return result;
+	}
+	public Account checkRcc(Connection conn, String rccNum) {
+		Account rcc = new Account();
+		try(PreparedStatement ps = createRccPS(conn,rccNum,p.getProperty("checkrcc"));
+				ResultSet rs = ps.executeQuery()){
+			if(rs.next()) {
+				rcc.setAccNumber(rs.getString("acc_number"));
+				rcc.setSsN(rs.getString("ssn"));
+				rcc.setBal(rs.getInt("bal"));
+				rcc.setPhone(rs.getString("phone"));
+				rcc.setName(rs.getString("u_name"));
+				rcc.setEstDate(rs.getDate("estdate"));
+				rcc.setId(rs.getString("id"));
+				rcc.setPassword(rs.getString("password"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return rcc;
+	}
+	private PreparedStatement createRccPS(Connection conn, String rccNum, String query) throws SQLException {
+		PreparedStatement ps = conn.prepareStatement(query);
+		ps.setString(1, rccNum);
+		return ps;
 	}
 	
 	

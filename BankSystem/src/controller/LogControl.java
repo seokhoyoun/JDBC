@@ -18,8 +18,15 @@ public class LogControl {
 	}
 
 	public void depositLog(Account acc, int dMoney) {
-		Log log = new Log(acc.getId(), dMoney, 1, acc.getName());
+		Log log = new Log(acc.getId(), 1, acc.getName());
+		log.setDeposit(dMoney);
 		int result = ls.depositLog(log);
+	}
+
+	public void withdrawLog(Account acc, int wMoney) {
+		Log log = new Log(acc.getId(), 2, acc.getName());
+		log.setWithdraw(wMoney);
+		int result = ls.withdrawLog(log);
 	}
 
 }

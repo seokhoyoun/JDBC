@@ -18,13 +18,13 @@ public class Log implements Serializable{
 	}
 
 	// 입금용 생성자
-	public Log(String id, int deposit, int type, String comment) {
+	public Log(String id, int type, String comment) {
 		super();
 		this.id = id;
-		this.deposit = deposit;
 		this.comment = comment;
 		this.type = type;
 	}
+	
 
 	public Log(String id, String receiverId, Date exDate, int deposit, int withdraw, int type, String comment) {
 		super();

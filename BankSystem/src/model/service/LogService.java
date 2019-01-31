@@ -24,4 +24,13 @@ public class LogService {
 		return result;
 	}
 
+	public int withdrawLog(Log log) {
+		Connection conn = getConnection();
+		int result = ld.withdrawLog(conn, log);
+		if(result > 0)
+			commit(conn);
+		close(conn);
+		return result;
+	}
+
 }

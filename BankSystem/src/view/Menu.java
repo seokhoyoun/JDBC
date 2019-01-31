@@ -57,7 +57,9 @@ public class Menu {
 			case 1 : printAcc(acc); break;
 			case 2 : ac.deposit(acc, howMuch(2));  break;
 			case 3 : ac.withdraw(acc, howMuch(3)); break;
-			case 4 : break;
+			case 4 : Account rcc = putWho(); 
+						if(sc.next().toLowerCase().charAt(0) == 'y') { ac.transfer(acc,rcc,howMuch(4)); break;}
+						else break;
 			case 5 : break;
 			case 6 : mainMenu();
 			}
@@ -100,6 +102,16 @@ public class Menu {
 		}
 		return sc.nextInt();
 	}
+	private Account putWho() {
+		System.out.print("송금 할 계좌번호 입력 : ");
+		Account rcc = ac.checkRcc(sc.next());
+		if(rcc.getAccNumber() == null) 
+			System.out.println("입력하신 계좌번호는 없는 번호입니다.");
+		else 
+			System.out.print(rcc.getName()+"님에게 송금하시겠습니까? (y/n) :");
+		return rcc;
+	}
+	
 	
 	private String putID() {
 		System.out.print("아이디 입력 :");
@@ -109,9 +121,8 @@ public class Menu {
 		System.out.print("패스워드 입력 : ");
 		return sc.next();
 	}
-	
 	private void printAcc(Account acc) {
-		System.out.println("\n계좌번호 \t\t이름 \t잔액 \t개설날짜");
+		System.out.println("\n계좌번호 \t이름 \t잔액 \t개설날짜");
 		System.out.println("==================================================");
 		System.out.println(acc.getAccNumber()+"\t"+acc.getName()+"\t"+acc.getBal()+"원\t"+acc.getEstDate());
 	}

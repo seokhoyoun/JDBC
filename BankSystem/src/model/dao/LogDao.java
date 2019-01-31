@@ -35,6 +35,25 @@ public class LogDao {
 			}
 				
 		} catch (SQLException e) {
+			rollback(conn);
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public int withdrawLog(Connection conn, Log log) {
+		int result = 0;
+		try(PreparedStatement ps = conn.prepareStatement(p.getProperty("withdraw"))){
+			ps.setString(1, log.getId());
+			ps.setInt(2, log.getWithdraw());
+			ps.setString(3, log.getComment());
+			result = ps.executeUpdate();
+			if(result <= 0) {
+				rollback(conn);
+			}
+				
+		} catch (SQLException e) {
+			rollback(conn);
 			e.printStackTrace();
 		}
 		return result;

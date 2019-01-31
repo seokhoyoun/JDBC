@@ -40,10 +40,19 @@ public class AccountService {
 		return result;
 	}
 
-	public int withdraw(Account acc) {
+	public int withdraw(Account acc) throws BankException {
 		Connection conn = getConnection();
 		int result = ad.withdraw(conn, acc);
-		return 0;
+		if(result > 0)
+			commit(conn);
+		close(conn);
+		return result;
+	}
+
+	public Account checkRcc(String rccNum) {
+		Connection conn = getConnection();
+		Account rcc = ad.checkRcc(conn, rccNum);
+		return rcc;
 	}
 
 	
