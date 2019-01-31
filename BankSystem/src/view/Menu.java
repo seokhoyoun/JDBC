@@ -60,11 +60,19 @@ public class Menu {
 			case 4 : Account rcc = putWho(); 
 						if(sc.next().toLowerCase().charAt(0) == 'y') { ac.transfer(acc,rcc,howMuch(4)); break;}
 						else break;
-			case 5 : break;
+			case 5 : subSearchMenu(acc);break;
 			case 6 : return;
 			}
 		}
-		
+	}
+	private void subSearchMenu() {
+		while(true) {
+			System.out.print("================\n"
+					+ "1. 입금 내역 출력 "
+					+ "2. 출금 내역 출력"
+					+ "번호 입력 : ");
+			int mnum = sc.nextInt();
+		}
 	}
 
 	public Account putData() {
