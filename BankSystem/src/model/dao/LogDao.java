@@ -23,7 +23,7 @@ public class LogDao {
 		}
 	}
 
-	public int depositLog(Connection conn, Log log) {
+	public int depositLog(Connection conn, Log log) throws LogException {
 		int result = 0;
 		try(PreparedStatement ps = conn.prepareStatement(p.getProperty("deposit"))){
 			ps.setString(1, log.getId());
@@ -32,16 +32,17 @@ public class LogDao {
 			result = ps.executeUpdate();
 			if(result <= 0) {
 				rollback(conn);
+				throw new LogException("\n입금 정보 저장에 문제가 발생했습니다.\n관리자에게 문의하세요");
 			}
 				
 		} catch (SQLException e) {
 			rollback(conn);
-			e.printStackTrace();
+			throw new LogException(e.getMessage());
 		}
 		return result;
 	}
 
-	public int withdrawLog(Connection conn, Log log) {
+	public int withdrawLog(Connection conn, Log log) throws LogException {
 		int result = 0;
 		try(PreparedStatement ps = conn.prepareStatement(p.getProperty("withdraw"))){
 			ps.setString(1, log.getId());
@@ -50,11 +51,32 @@ public class LogDao {
 			result = ps.executeUpdate();
 			if(result <= 0) {
 				rollback(conn);
+				throw new LogException("\n출금 정보 저장에 문제가 발생했습니다.\n관리자에게 문의하세요");
 			}
 				
 		} catch (SQLException e) {
 			rollback(conn);
-			e.printStackTrace();
+			throw new LogException(e.getMessage());
+		}
+		return result;
+	}
+
+	public int transferLog(Connection conn, Log log) throws LogException {
+		int result = 0;
+		try(PreparedStatement ps = conn.prepareStatement(p.getProperty("transfer"))){
+			ps.setString(1, log.getId());
+			ps.setString(2, log.getReceiverId());
+			ps.setInt(3, log.getWithdraw());
+			ps.setString(4, log.getComment());
+			result = ps.executeUpdate();
+			if(result <= 0) {
+				rollback(conn);
+				throw new LogException("\n송금 정보 저장에 문제가 발생했습니다.\n관리자에게 문의하세요");
+			}
+				
+		} catch (SQLException e) {
+			rollback(conn);
+			throw new LogException(e.getMessage());
 		}
 		return result;
 	}

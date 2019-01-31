@@ -20,13 +20,32 @@ public class LogControl {
 	public void depositLog(Account acc, int dMoney) {
 		Log log = new Log(acc.getId(), 1, acc.getName());
 		log.setDeposit(dMoney);
-		int result = ls.depositLog(log);
+		try {
+			int result = ls.depositLog(log);
+		} catch (LogException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void withdrawLog(Account acc, int wMoney) {
 		Log log = new Log(acc.getId(), 2, acc.getName());
 		log.setWithdraw(wMoney);
-		int result = ls.withdrawLog(log);
+		try {
+			int result = ls.withdrawLog(log);
+		} catch (LogException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void transferLog(Account acc, Account rcc, int tMoney) {
+		Log log = new Log(acc.getId(), rcc.getId(), tMoney, 3, acc.getName()+" to "+rcc.getName());
+		try {
+			int result = ls.transfer(log);
+		} catch (LogException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

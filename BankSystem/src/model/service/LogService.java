@@ -15,7 +15,7 @@ public class LogService {
 		ld = new LogDao();
 	}
 
-	public int depositLog(Log log) {
+	public int depositLog(Log log) throws LogException {
 		Connection conn = getConnection();
 		int result = ld.depositLog(conn, log);
 		if(result > 0)
@@ -24,9 +24,18 @@ public class LogService {
 		return result;
 	}
 
-	public int withdrawLog(Log log) {
+	public int withdrawLog(Log log) throws LogException {
 		Connection conn = getConnection();
 		int result = ld.withdrawLog(conn, log);
+		if(result > 0)
+			commit(conn);
+		close(conn);
+		return result;
+	}
+
+	public int transfer(Log log) throws LogException {
+		Connection conn = getConnection();
+		int result = ld.transferLog(conn, log);
 		if(result > 0)
 			commit(conn);
 		close(conn);

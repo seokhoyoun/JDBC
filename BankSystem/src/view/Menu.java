@@ -28,8 +28,8 @@ public class Menu {
 		case 1 : ac.createUser(putData()); break;
 		case 2 : Account acc = ac.logIn(putID(),putPwd());
 					if(acc == null) {System.out.println("로그인 실패"); break;}
-					if(Integer.parseInt(acc.getAccNumber()) > 1) userMenu(acc);
-					else if(Integer.parseInt(acc.getAccNumber()) == 1) managerMenu(acc);
+					if(Integer.parseInt(acc.getAccNumber()) > 1) {userMenu(acc); break;}
+					else if(Integer.parseInt(acc.getAccNumber()) == 1) {managerMenu(acc); break;}
 					else break;
 		case 3 : return;
 		}
@@ -61,7 +61,7 @@ public class Menu {
 						if(sc.next().toLowerCase().charAt(0) == 'y') { ac.transfer(acc,rcc,howMuch(4)); break;}
 						else break;
 			case 5 : break;
-			case 6 : mainMenu();
+			case 6 : return;
 			}
 		}
 		

@@ -24,14 +24,12 @@ public class Log implements Serializable{
 		this.comment = comment;
 		this.type = type;
 	}
+	// 송금용 생성자
 	
-
-	public Log(String id, String receiverId, Date exDate, int deposit, int withdraw, int type, String comment) {
+	public Log(String id, String receiverId, int withdraw, int type, String comment) {
 		super();
 		this.id = id;
 		this.receiverId = receiverId;
-		this.exDate = exDate;
-		this.deposit = deposit;
 		this.withdraw = withdraw;
 		this.type = type;
 		this.comment = comment;

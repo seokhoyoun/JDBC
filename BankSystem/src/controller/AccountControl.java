@@ -82,6 +82,7 @@ public class AccountControl {
 			int result2 = as.deposit(rcc);
 			if(result1 > 0 && result2 > 0) {
 				System.out.println("\n"+rcc.getName()+"님에게 "+tMoney+"원을 송금했습니다.");
+				lc.transferLog(acc,rcc,tMoney);
 			}
 		} catch (BankException e) {
 			e.printStackTrace();
