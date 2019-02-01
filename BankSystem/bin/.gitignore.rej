@@ -1,6 +1,0 @@
-diff a/BankSystem/bin/.gitignore b/BankSystem/bin/.gitignore	(rejected hunks)
-@@ -1,4 +0,0 @@
--/controller/
--/view/
--/model/
--/exception/

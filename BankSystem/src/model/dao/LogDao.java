@@ -88,10 +88,11 @@ public class LogDao {
 		ArrayList<Log> list = new ArrayList<>();
 		PreparedStatement ps = null;
 				ResultSet rs = null;
-		
+				String query = p.getProperty("getdlog");
+				String id = acc.getId();
 				try {
-					ps = conn.prepareStatement(p.getProperty("getdlog"));
-					ps.setString(1, acc.getId());
+					ps = conn.prepareStatement(query);
+					ps.setString(1, id);
 					rs = ps.executeQuery();
 					while(rs.next()) {
 						Log log = new Log();

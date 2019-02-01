@@ -1,8 +1,6 @@
-<<<<<<< HEAD
-/model/
+/common/
 /controller/
-=======
+/exception/
+/model/
+/run/
 /view/
-/controller/
-/model/
->>>>>>> 0f605b08b282b1f402809fc6355a75a1663aff18
