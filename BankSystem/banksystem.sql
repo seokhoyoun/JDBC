@@ -55,3 +55,4 @@ COMMIT;
 delete from user_account;
 select id from user_account where id = 'tjrghekt' and password = '1234';
 
+select * from bank_log where id = 'tjrghekt' and log_type = 1;

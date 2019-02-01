@@ -4,10 +4,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import exception.LogException;
+import model.vo.Account;
 import model.vo.Log;
 import static common.JDBCTemp.*;
 
@@ -80,5 +83,67 @@ public class LogDao {
 		}
 		return result;
 	}
+	
+	public ArrayList<Log> getDlog(Connection conn, Account acc) {
+		ArrayList<Log> list = new ArrayList<>();
+		PreparedStatement ps = null;
+				ResultSet rs = null;
+		
+				try {
+					ps = conn.prepareStatement(p.getProperty("getdlog"));
+					ps.setString(1, acc.getId());
+					rs = ps.executeQuery();
+					while(rs.next()) {
+						Log log = new Log();
+						log.setId(rs.getString(1));
+						log.setReceiverId(rs.getString(2));
+						log.setExDate(rs.getDate(3));
+						log.setDeposit(rs.getInt(4));
+						log.setComment(rs.getString(7));
+						
+						list.add(log);
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				} finally {
+					try {
+						rs.close();
+						ps.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			
+		
+		return list;
+	}
+	
+	/*public ArrayList<Log> getDlog(Connection conn, Account acc) {
+		ArrayList<Log> list = new ArrayList<>();
+		try(PreparedStatement ps = createGetDlogPS(conn, acc, p.getProperty("getdlog"));
+				ResultSet rs = ps.executeQuery()){
+			while(rs.next()) {
+				Log log = new Log();
+				log.setId(rs.getString(1));
+				log.setReceiverId(rs.getString(2));
+				log.setExDate(rs.getDate(3));
+				log.setDeposit(rs.getInt(4));
+				log.setComment(rs.getString(7));
+				
+				list.add(log);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	private PreparedStatement createGetDlogPS(Connection conn, Account acc, String query) throws SQLException {
+		PreparedStatement ps = conn.prepareStatement(query);
+		String id = acc.getId();
+		ps.setString(1, id);
+		return ps;
+	}*/
 
 }

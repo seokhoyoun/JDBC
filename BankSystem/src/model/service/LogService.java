@@ -1,10 +1,12 @@
 package model.service;
 
 import model.dao.LogDao;
+import model.vo.Account;
 import model.vo.Log;
 import static common.JDBCTemp.*;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 
 import exception.LogException;
 public class LogService {
@@ -40,6 +42,12 @@ public class LogService {
 			commit(conn);
 		close(conn);
 		return result;
+	}
+
+	public ArrayList<Log> getDlog(Account acc) {
+		Connection conn = getConnection();
+		ArrayList<Log> list = ld.getDlog(conn, acc);
+		return list;
 	}
 
 }

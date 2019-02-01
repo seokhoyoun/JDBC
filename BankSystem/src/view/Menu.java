@@ -1,10 +1,12 @@
 package view;
 
+import java.util.List;
 import java.util.Scanner;
 
 import controller.AccountControl;
 import controller.LogControl;
 import model.vo.Account;
+import model.vo.Log;
 
 public class Menu {
 	private Scanner sc = new Scanner(System.in);
@@ -60,11 +62,29 @@ public class Menu {
 			case 4 : Account rcc = putWho(); 
 						if(sc.next().toLowerCase().charAt(0) == 'y') { ac.transfer(acc,rcc,howMuch(4)); break;}
 						else break;
-			case 5 : break;
+			case 5 : showDataMenu(acc); break;
 			case 6 : return;
 			}
 		}
 		
+	}
+	private void showDataMenu(Account acc) {
+		System.out.print("===============\n"
+				+ "1. 입금내역 조회\n"
+				+ "2. 출금내역 조회\n"
+				+ "번호 입력 : ");
+		int mnum = sc.nextInt();
+		switch(mnum) {
+		case 1 : printDlog(lc.getDlog(acc)); 
+		case 2 :
+		}
+	}
+	private void printDlog(List<Log> list) {
+		if(list.isEmpty())
+			System.out.println("조회된 결과가 없습니다.");
+		else
+			for(Log e : list)
+				System.out.println(e);
 	}
 
 	public Account putData() {

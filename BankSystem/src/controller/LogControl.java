@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.ArrayList;
+
 import exception.LogException;
 import model.service.LogService;
 import model.vo.Account;
@@ -33,7 +35,6 @@ public class LogControl {
 		try {
 			int result = ls.withdrawLog(log);
 		} catch (LogException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -43,9 +44,13 @@ public class LogControl {
 		try {
 			int result = ls.transfer(log);
 		} catch (LogException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public ArrayList<Log> getDlog(Account acc) {
+		ArrayList<Log> list = ls.getDlog(acc);
+		return list;
 	}
 
 }
