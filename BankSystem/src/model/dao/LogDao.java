@@ -96,11 +96,12 @@ public class LogDao {
 					rs = ps.executeQuery();
 					while(rs.next()) {
 						Log log = new Log();
-						log.setId(rs.getString(1));
-						log.setReceiverId(rs.getString(2));
-						log.setExDate(rs.getDate(3));
-						log.setDeposit(rs.getInt(4));
-						log.setComment(rs.getString(7));
+//						log.setId(rs.getString(1));
+//						log.setReceiverId(rs.getString(2));
+//						log.setExDate(rs.getString("to_char(ex_date,'RRRR/MM/DD HH:MI:SS')"));
+						log.setExDate(rs.getString("date"));
+						log.setDeposit(rs.getInt("deposit"));
+//						log.setComment(rs.getString(7));
 						
 						list.add(log);
 					}

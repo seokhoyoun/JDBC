@@ -34,8 +34,8 @@ SELECT * FROM USER_ACCOUNT;
 DROP TABLE BANK_LOG;
 CREATE TABLE BANK_LOG
 (
-ID CHAR(12) NOT NULL,
-RECEIVER_ID CHAR(12),
+ID VARCHAR(12) ,
+RECEIVER_ID VARCHAR(12),
 EX_DATE DATE NOT NULL,
 DEPOSIT NUMBER,
 WITHDRAW NUMBER,
@@ -56,3 +56,6 @@ delete from user_account;
 select id from user_account where id = 'tjrghekt' and password = '1234';
 
 select * from bank_log where id = 'tjrghekt' and log_type = 1;
+
+select to_char(ex_date,'RRRR/MM/DD HH:MI:SS') AS LDATE, deposit from bank_log where id = 'tjrghekt' and log_type = 1;
+select to_char(ex_date,'RRRR/MM/DD HH:MI:SS') , DEPOSIT FROM BANK_LOG where id = 'tjrghekt' and log_type = 1;

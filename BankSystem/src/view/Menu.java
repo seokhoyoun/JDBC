@@ -1,5 +1,6 @@
 package view;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Scanner;
 
@@ -79,11 +80,15 @@ public class Menu {
 		}
 	}
 	private void printDlog(List<Log> list) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		if(list.isEmpty())
 			System.out.println("조회된 결과가 없습니다.");
-		else
-			for(Log e : list)
-				System.out.println(e);
+		else {
+			for(Log e : list) {
+				System.out.println("입금 시간 : "+e.getExDate());
+				System.out.println("입금 액 : "+ e.getDeposit()+"원 \n");
+			}
+		}
 	}
 
 	public Account putData() {

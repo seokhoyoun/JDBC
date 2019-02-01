@@ -8,7 +8,7 @@ public class Log implements Serializable{
 	private static final long serialVersionUID = 3359548848484430476L;
 	private String id; // 아이디
 	private String receiverId; // 받는 사람 아이디 (* 이체 시)
-	private Date exDate; // 거래일시
+	private String exDate; // 거래일시
 	private int deposit; // 입금액
 	private int withdraw; // 출금액
 	private int type; // 1.입금 2.출금 3.송금
@@ -63,12 +63,12 @@ public class Log implements Serializable{
 	}
 
 
-	public Date getExDate() {
+	public String getExDate() {
 		return exDate;
 	}
 
 
-	public void setExDate(Date exDate) {
+	public void setExDate(String exDate) {
 		this.exDate = exDate;
 	}
 
