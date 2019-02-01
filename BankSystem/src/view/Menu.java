@@ -62,11 +62,23 @@ public class Menu {
 			case 4 : Account rcc = putWho(); 
 						if(sc.next().toLowerCase().charAt(0) == 'y') { ac.transfer(acc,rcc,howMuch(4)); break;}
 						else break;
+<<<<<<< HEAD
 			case 5 : showDataMenu(acc); break;
+=======
+			case 5 : subSearchMenu(acc);break;
+>>>>>>> 0f605b08b282b1f402809fc6355a75a1663aff18
 			case 6 : return;
 			}
 		}
-		
+	}
+	private void subSearchMenu() {
+		while(true) {
+			System.out.print("================\n"
+					+ "1. 입금 내역 출력 "
+					+ "2. 출금 내역 출력"
+					+ "번호 입력 : ");
+			int mnum = sc.nextInt();
+		}
 	}
 	private void showDataMenu(Account acc) {
 		System.out.print("===============\n"
