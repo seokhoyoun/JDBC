@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import exception.LogException;
 import model.service.LogService;
@@ -40,7 +41,7 @@ public class LogControl {
 	}
 
 	public void transferLog(Account acc, Account rcc, int tMoney) {
-		Log log = new Log(acc.getId(), rcc.getId(), tMoney, 3, acc.getName()+" to "+rcc.getName());
+		Log log = new Log(acc.getId(), rcc.getId(), tMoney, 3, acc.getName()+"-"+rcc.getName());
 		try {
 			int result = ls.transfer(log);
 		} catch (LogException e) {
@@ -50,6 +51,11 @@ public class LogControl {
 
 	public ArrayList<Log> getDlog(Account acc) {
 		ArrayList<Log> list = ls.getDlog(acc);
+		return list;
+	}
+
+	public List<Log> getWlog(Account acc) {
+		ArrayList<Log> list = ls.getWlog(acc);
 		return list;
 	}
 

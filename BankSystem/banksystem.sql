@@ -1,3 +1,16 @@
+INSERT INTO USER_ACCOUNT
+VALUES (LPAD(SEQ_ACC.NEXTVAL, 5,0),'930216-1111000',DEFAULT,'01112341234','석호',SYSDATE,'tjrghekt','1234');
+INSERT INTO USER_ACCOUNT
+VALUES (LPAD(SEQ_ACC.NEXTVAL, 5,0),'910216-1111000',DEFAULT,'01112341234','선용',SYSDATE,'sungod','1234');
+INSERT INTO USER_ACCOUNT
+VALUES (LPAD(SEQ_ACC.NEXTVAL, 5,0),'910119-1111000',DEFAULT,'01112341234','동욱',SYSDATE,'uksuks','1234');
+INSERT INTO USER_ACCOUNT
+VALUES (LPAD(SEQ_ACC.NEXTVAL, 5,0),'900726-1111000',DEFAULT,'01112341234','성수',SYSDATE,'godsung','1234');
+INSERT INTO USER_ACCOUNT
+VALUES (LPAD(SEQ_ACC.NEXTVAL, 5,0),'920513-1111000',DEFAULT,'01112341234','정은',SYSDATE,'devje','1234');
+INSERT INTO USER_ACCOUNT
+VALUES (LPAD(SEQ_ACC.NEXTVAL, 5,0),'910226-1111000',DEFAULT,'01112341234','민경',SYSDATE,'mk1234','1234');
+--DELETE USER_ACCOUNT;
 CREATE TABLE USER_ACCOUNT
 (
 ACC_NUMBER CHAR(5) ,
@@ -59,3 +72,26 @@ select * from bank_log where id = 'tjrghekt' and log_type = 1;
 
 select to_char(ex_date,'RRRR/MM/DD HH:MI:SS') AS LDATE, deposit from bank_log where id = 'tjrghekt' and log_type = 1;
 select to_char(ex_date,'RRRR/MM/DD HH:MI:SS') , DEPOSIT FROM BANK_LOG where id = 'tjrghekt' and log_type = 1;
+select to_char(ex_date,'RRRR/MM/DD HH:MI:SS'), withdraw from bank_log where id = 'tjrghekt' and log_type in (2,3);
+delete from BANK_LOG;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

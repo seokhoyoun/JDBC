@@ -72,15 +72,32 @@ public class Menu {
 		System.out.print("===============\n"
 				+ "1. 입금내역 조회\n"
 				+ "2. 출금내역 조회\n"
+				+ "3. 이전 메뉴로 돌아가기\n"
 				+ "번호 입력 : ");
 		int mnum = sc.nextInt();
 		switch(mnum) {
-		case 1 : printDlog(lc.getDlog(acc)); 
-		case 2 :
+		case 1 : printDlog(lc.getDlog(acc)); break;
+		case 2 : printWlog(lc.getWlog(acc)); break;
+		case 3 : break;
 		}
 	}
+	private void printWlog(List<Log> list) {
+		if(list.isEmpty())
+			System.out.println("조회된 결과가 없습니다.");
+		else {
+			for(Log e : list) {
+				System.out.println("\n출금 시간 : "+e.getExDate());
+				System.out.println("출금 액 : "+ e.getWithdraw()+"원");
+				if(e.getType() != 1) {
+					String[] names = e.getComment().split("-");
+					System.out.println("보낸 사람 : "+names[0]);
+					System.out.println("받는 사람 : "+names[1]);
+				}
+			}
+		}
+	}
+	
 	private void printDlog(List<Log> list) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		if(list.isEmpty())
 			System.out.println("조회된 결과가 없습니다.");
 		else {

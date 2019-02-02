@@ -96,12 +96,8 @@ public class LogDao {
 					rs = ps.executeQuery();
 					while(rs.next()) {
 						Log log = new Log();
-//						log.setId(rs.getString(1));
-//						log.setReceiverId(rs.getString(2));
-//						log.setExDate(rs.getString("to_char(ex_date,'RRRR/MM/DD HH:MI:SS')"));
 						log.setExDate(rs.getString("date"));
 						log.setDeposit(rs.getInt("deposit"));
-//						log.setComment(rs.getString(7));
 						
 						list.add(log);
 					}
@@ -119,7 +115,34 @@ public class LogDao {
 		
 		return list;
 	}
+
+	public ArrayList<Log> getWlog(Connection conn, Account acc) {
+		ArrayList<Log> list = new ArrayList<>();
+		try(PreparedStatement ps = createWlogPS(conn, acc, p.getProperty("getwlog"));
+				ResultSet rs = ps.executeQuery()){
+			while(rs.next()) {
+				Log log = new Log();
+				log.setExDate(rs.getString(1));
+				log.setWithdraw(rs.getInt(2));
+				log.setType(rs.getShort(3));
+				log.setComment(rs.getString(4));
+				list.add(log);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 	
+
+
+	private PreparedStatement createWlogPS(Connection conn, Account acc, String query) throws SQLException {
+		PreparedStatement ps = conn.prepareStatement(query);
+		ps.setString(1, acc.getId());
+		return ps;
+	}
+
+	}
 	/*public ArrayList<Log> getDlog(Connection conn, Account acc) {
 		ArrayList<Log> list = new ArrayList<>();
 		try(PreparedStatement ps = createGetDlogPS(conn, acc, p.getProperty("getdlog"));
@@ -147,5 +170,3 @@ public class LogDao {
 		ps.setString(1, id);
 		return ps;
 	}*/
-
-}
