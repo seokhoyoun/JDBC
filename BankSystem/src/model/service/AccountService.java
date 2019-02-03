@@ -26,10 +26,10 @@ public class AccountService {
 		return ad.checkID(conn, id);
 	}
 
-	public Account logIn(String id, String pwd) throws BankException {
+	public ArrayList<Account> logIn(String id, String pwd) throws BankException {
 		Connection conn = getConnection();
-		Account acc = ad.logIn(conn,id,pwd);
-		return acc;
+		ArrayList<Account> list = ad.logIn(conn,id,pwd);
+		return list;
 	}
 
 	public int deposit(Account acc) throws BankException {

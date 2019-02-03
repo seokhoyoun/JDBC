@@ -63,13 +63,13 @@ public class AccountDao {
 		}
 		return result;
 	}
-	public Account logIn(Connection conn, String id, String pwd)  {
-		Account acc = null;
+	public ArrayList<Account> logIn(Connection conn, String id, String pwd)  {
+		ArrayList<Account> list = new ArrayList<>();
 		String query = p.getProperty("login");
 		try(PreparedStatement ps = CreatePS(conn, id, pwd, query);
 				ResultSet rset = ps.executeQuery()){
-			if(rset.next()) {
-				acc = new Account();
+			while(rset.next()) {
+				Account acc = new Account();
 				acc.setAccNumber(rset.getString("acc_number"));
 				acc.setSsN(rset.getString("ssn"));
 				acc.setBal(rset.getInt("bal"));
@@ -78,14 +78,13 @@ public class AccountDao {
 				acc.setEstDate(rset.getDate("estdate"));
 				acc.setId(rset.getString("id"));
 				acc.setPassword(rset.getString("password"));
+				list.add(acc);
 			}
-			else
-				System.out.println("아이디와 비밀번호가 일치하지 않습니다.");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		return acc;
+		return list;
 	}
 	private PreparedStatement CreatePS(Connection conn, String id, String pwd, String query) throws SQLException {
 		PreparedStatement ps = conn.prepareStatement(query);
@@ -97,7 +96,7 @@ public class AccountDao {
 		int result = 0;
 		try(PreparedStatement ps = conn.prepareStatement(p.getProperty("deposit"))){
 			ps.setInt(1, acc.getBal());
-			ps.setString(2, acc.getId());
+			ps.setString(2, acc.getAccNumber());
 			result = ps.executeUpdate();
 			if(result <= 0) {
 				rollback(conn);
@@ -113,7 +112,7 @@ public class AccountDao {
 		int result = 0;
 		try(PreparedStatement ps = conn.prepareStatement(p.getProperty("withdraw"))){
 			ps.setInt(1, acc.getBal());
-			ps.setString(2, acc.getId());
+			ps.setString(2, acc.getAccNumber());
 			result = ps.executeUpdate();
 			if(result <= 0) {
 				rollback(conn);

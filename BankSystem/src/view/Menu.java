@@ -1,6 +1,7 @@
 package view;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -29,21 +30,20 @@ public class Menu {
 		int mnum = sc.nextInt();
 		switch(mnum) {
 		case 1 : ac.createUser(putData()); break;
-		case 2 : Account acc = ac.logIn(putID(),putPwd());
-					if(acc == null) {System.out.println("로그인 실패"); break;}
-					if(Integer.parseInt(acc.getAccNumber()) > 1) {userMenu(acc); break;}
-					else if(Integer.parseInt(acc.getAccNumber()) == 1) {managerMenu(acc); break;}
-					else break;
+		case 2 : ArrayList<Account> list = ac.logIn(putID(),putPwd()); 
+					if(list.isEmpty()) {System.out.println("로그인 실패"); break;}
+					else if(!list.get(0).getId().equals("system")) {userMenu(list); break;}
+					else {managerMenu(list); break;}
 		case 3 : return;
 		}
 	}
 	}
 	
-	private void managerMenu(Account acc) {
+	private void managerMenu(ArrayList<Account> list) {
 		System.out.println("관리자 메뉴 접속...");
 	}
 
-	private void userMenu(Account acc) {
+	private void userMenu(ArrayList<Account> list) {
 		System.out.println("\n사용자 메뉴 접속중...");
 		while(true) {
 			System.out.print("\n=================\n"
@@ -58,19 +58,37 @@ public class Menu {
 			int mnum = sc.nextInt();
 			
 			switch(mnum) {
-			case 1 : printAcc(ac.checkAcc(acc)); break;
-			case 2 : ac.deposit(acc, howMuch(2));  break;
-			case 3 : ac.withdraw(acc, howMuch(3)); break;
+			case 1 : printAcc(list); break;
+			case 2 : ac.deposit(chooseAcc(2,list), howMuch(2));  break;
+			case 3 : ac.withdraw(chooseAcc(3,list), howMuch(3)); break;
 			case 4 : Account rcc = putWho(); 
-						if(sc.next().toLowerCase().charAt(0) == 'y') { ac.transfer(acc,rcc,howMuch(4)); break;} // 송금
+						if(sc.next().toLowerCase().charAt(0) == 'y') { ac.transfer(chooseAcc(4,list),rcc,howMuch(4)); break;} // 송금
 						else break; // 안하면 다시 메뉴로 이동.
-			case 5 : showDataMenu(acc); break;
-			case 6 :if(ac.checkAcc(acc).size() >= 3) {System.out.println("\n계좌 생성은 한 계정 당 3개 까지만 가능합니다."); break;}
-					else {ac.createUser(acc); break;} 
+			case 5 : showDataMenu(chooseAcc(5,list)); break;
+			case 6 :if(list.size() >= 3) {System.out.println("\n계좌 생성은 한 계정 당 3개 까지만 가능합니다."); break;}
+					else {ac.createUser(list.get(0)); break;} 
 			case 7 : return;
 			}
 		}
 	}
+	public Account chooseAcc(int num, List<Account> list) {
+		System.out.println("==========================================");
+		for(int i = 0; i < list.size(); i++) 
+			System.out.println((i+1)+") 계좌 번호 : "+list.get(i).getAccNumber()+"\t잔액 : "+list.get(i).getBal()+"원\n");
+		
+		switch(num) {
+		case 2 : System.out.print("\n입금하실 계좌를 선택하세요 : "); break;
+		case 3 : System.out.print("\n출금하실 계좌를 선택하세요 : "); break;
+		case 4 : System.out.print("\n송금하실 계좌를 선택하세요 : "); break;
+		case 5 : System.out.print("\n조회하실 계좌를 선택하세요 : "); break;
+		}
+//		int index = sc.nextInt()-1;
+		int index = 0;
+		while((index = sc.nextInt()-1) >= list.size() || index < 0) 
+			System.out.println("입력 값이 잘못되었습니다. 다시 선택해 주세요");
+		return list.get(index);
+	}
+	
 	private void showDataMenu(Account acc) {
 		System.out.print("===============\n"
 				+ "1. 입금내역 조회\n"
@@ -84,6 +102,8 @@ public class Menu {
 		case 3 : break;
 		}
 	}
+	
+	
 	private void printWlog(List<Log> list) {
 		if(list.isEmpty())
 			System.out.println("조회된 결과가 없습니다.");

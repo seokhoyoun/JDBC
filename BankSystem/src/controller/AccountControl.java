@@ -31,14 +31,14 @@ public class AccountControl {
 		return as.checkID(id);
 	}
 
-	public Account logIn(String id, String pwd) {
-		Account acc = null;
+	public ArrayList<Account> logIn(String id, String pwd) {
+		ArrayList<Account> list = null;
 		try {
-			acc = as.logIn(id, pwd);
+			list = as.logIn(id, pwd);
 		} catch (BankException e) {
 			e.printStackTrace();
 		}
-		return acc;
+		return list;
 	}
 
 	public void deposit(Account acc, int dMoney) {
