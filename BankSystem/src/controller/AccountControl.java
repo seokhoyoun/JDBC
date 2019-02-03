@@ -1,5 +1,8 @@
 package controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import exception.BankException;
 import model.service.AccountService;
 import model.vo.Account;
@@ -87,6 +90,11 @@ public class AccountControl {
 		} catch (BankException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public List<Account> checkAcc(Account acc) {
+		ArrayList<Account> list = as.checkAcc(acc); 
+		return list;
 	}
 
 	

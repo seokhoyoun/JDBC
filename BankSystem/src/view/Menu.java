@@ -52,19 +52,22 @@ public class Menu {
 					+ "3. 출금하기 \n"
 					+ "4. 송금하기 \n"
 					+ "5. 거래내역 조회 \n"
-					+ "6. 메인메뉴로 돌아가기 \n"
+					+ "6. 계좌 추가 생성 \n"
+					+ "7. 메인메뉴로 돌아가기 \n"
 					+ "번호 선택 : ");
 			int mnum = sc.nextInt();
 			
 			switch(mnum) {
-			case 1 : printAcc(acc); break;
+			case 1 : printAcc(ac.checkAcc(acc)); break;
 			case 2 : ac.deposit(acc, howMuch(2));  break;
 			case 3 : ac.withdraw(acc, howMuch(3)); break;
 			case 4 : Account rcc = putWho(); 
-						if(sc.next().toLowerCase().charAt(0) == 'y') { ac.transfer(acc,rcc,howMuch(4)); break;}
-						else break;
+						if(sc.next().toLowerCase().charAt(0) == 'y') { ac.transfer(acc,rcc,howMuch(4)); break;} // 송금
+						else break; // 안하면 다시 메뉴로 이동.
 			case 5 : showDataMenu(acc); break;
-			case 6 : return;
+			case 6 :if(ac.checkAcc(acc).size() >= 3) {System.out.println("\n계좌 생성은 한 계정 당 3개 까지만 가능합니다."); break;}
+					else {ac.createUser(acc); break;} 
+			case 7 : return;
 			}
 		}
 	}
@@ -162,10 +165,17 @@ public class Menu {
 		System.out.print("패스워드 입력 : ");
 		return sc.next();
 	}
-	private void printAcc(Account acc) {
-		System.out.println("\n계좌번호 \t이름 \t잔액 \t개설날짜");
-		System.out.println("==================================================");
-		System.out.println(acc.getAccNumber()+"\t"+acc.getName()+"\t"+acc.getBal()+"원\t"+acc.getEstDate());
+	private void printAcc(List<Account> list) {
+		if(list.isEmpty())
+			System.out.println("현재 생성된 계좌가 없습니다.");
+		else {
+			System.out.println("\n계좌번호 \t이름 \t잔액 \t개설날짜");
+			for(int i = 0; i < list.size(); i++) {
+				Account acc = list.get(i);
+				System.out.println("==================================================");
+				System.out.println(acc.getAccNumber()+"\t"+acc.getName()+"\t"+acc.getBal()+"원\t"+acc.getEstDate());
+			}
+		}
 	}
 	
 }

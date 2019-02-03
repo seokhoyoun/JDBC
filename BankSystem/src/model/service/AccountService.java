@@ -1,6 +1,7 @@
 package model.service;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 
 import static common.JDBCTemp.*;
 import model.dao.AccountDao;
@@ -53,6 +54,12 @@ public class AccountService {
 		Connection conn = getConnection();
 		Account rcc = ad.checkRcc(conn, rccNum);
 		return rcc;
+	}
+
+	public ArrayList<Account> checkAcc(Account acc) {
+		Connection conn = getConnection();
+		ArrayList<Account> list = ad.checkAcc(conn, acc); 
+		return list;
 	}
 
 	

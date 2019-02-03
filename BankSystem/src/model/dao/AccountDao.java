@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import static common.JDBCTemp.*;
@@ -146,6 +147,28 @@ public class AccountDao {
 	private PreparedStatement createRccPS(Connection conn, String rccNum, String query) throws SQLException {
 		PreparedStatement ps = conn.prepareStatement(query);
 		ps.setString(1, rccNum);
+		return ps;
+	}
+	public ArrayList<Account> checkAcc(Connection conn, Account acc) {
+		ArrayList<Account> list = new ArrayList<>();
+		try(PreparedStatement ps = createAccPS(conn, acc, p.getProperty("checkacc"));
+				ResultSet rs = ps.executeQuery()){
+			while(rs.next()) {
+				Account myAcc = new Account();
+				myAcc.setAccNumber(rs.getString(1));
+				myAcc.setName(rs.getString(5));
+				myAcc.setEstDate(rs.getDate(6));
+				myAcc.setBal(rs.getInt(3));
+				list.add(myAcc);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	private PreparedStatement createAccPS(Connection conn, Account acc, String query) throws SQLException {
+		PreparedStatement ps = conn.prepareStatement(query);
+		ps.setString(1, acc.getId());
 		return ps;
 	}
 	
