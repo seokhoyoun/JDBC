@@ -65,7 +65,7 @@ COMMENT ON COLUMN BANK_LOG.DEPOSIT IS '입금액';
 COMMENT ON COLUMN BANK_LOG.WITHDRAW IS '출금액';
 COMMENT ON COLUMN BANK_LOG.USER_COMMENT IS '메세지';
 COMMENT ON COLUMN BANK_LOG.LOG_TYPE IS '타입[1.입금/2.출금/3.송금]';
-COMMENT ON COLUMN BANK_LOG.ACC_NUMBER IS '보내는 사람 계좌번호';
+COMMENT ON COLUMN BANK_LOG.ACC_NUMBER IS '사용 계좌';
 COMMENT ON COLUMN BANK_LOG.RCC_NUMBER IS '받는 사람 계좌번호';
 
 
@@ -74,7 +74,7 @@ delete from user_account where id = 'tjrghekt';
 select id from user_account where id = 'tjrghekt' and password = '1234';
 
 select * from bank_log where id = 'tjrghekt' and log_type = 1;
-
+select to_char(ex_date,'RRRR/MM/DD HH:MI:SS'), withdraw, log_type, user_comment, acc_number, rcc_number from bank_log where acc_number = '00041' and log_type in (2,3);
 select to_char(ex_date,'RRRR/MM/DD HH:MI:SS') AS LDATE, deposit from bank_log where id = 'tjrghekt' and log_type = 1;
 select to_char(ex_date,'RRRR/MM/DD HH:MI:SS') , DEPOSIT FROM BANK_LOG where id = 'tjrghekt' and log_type = 1;
 select to_char(ex_date,'RRRR/MM/DD HH:MI:SS'), withdraw from bank_log where id = 'tjrghekt' and log_type in (2,3);

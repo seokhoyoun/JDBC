@@ -53,7 +53,7 @@ public class Menu {
 					+ "4. 송금하기 \n"
 					+ "5. 거래내역 조회 \n"
 					+ "6. 계좌 추가 생성 \n"
-					+ "7. 메인메뉴로 돌아가기 \n"
+					+ "7. 로그아웃 하기\n"
 					+ "번호 선택 : ");
 			int mnum = sc.nextInt();
 			
@@ -71,16 +71,32 @@ public class Menu {
 			}
 		}
 	}
+	private void showDataMenu(Account acc) {
+		System.out.print("===============\n"
+				+ "1. 입금내역 조회\n"
+				+ "2. 출금내역 조회\n"
+				+ "3. 계좌 입/출금 내역 조회 \n"
+				+ "4. 이전 메뉴로 돌아가기\n"
+				+ "번호 입력 : ");
+		int mnum = sc.nextInt();
+		switch(mnum) {
+		case 1 : printDlog(lc.getDlog(acc)); break;
+		case 2 : printWlog(lc.getWlog(acc)); break;
+		case 3 : printAllLog(lc.getAllLog(acc));break;
+		case 4 : return;
+		}
+	}
+	// 계좌 선택 메소드
 	public Account chooseAcc(int num, List<Account> list) {
 		System.out.println("==========================================");
 		for(int i = 0; i < list.size(); i++) 
 			System.out.println((i+1)+") 계좌 번호 : "+list.get(i).getAccNumber()+"\t잔액 : "+list.get(i).getBal()+"원\n");
 		
 		switch(num) {
-		case 2 : System.out.print("\n입금하실 계좌를 선택하세요 : "); break;
-		case 3 : System.out.print("\n출금하실 계좌를 선택하세요 : "); break;
-		case 4 : System.out.print("\n송금하실 계좌를 선택하세요 : "); break;
-		case 5 : System.out.print("\n조회하실 계좌를 선택하세요 : "); break;
+		case 2 : System.out.print("입금하실 계좌를 선택하세요 : "); break;
+		case 3 : System.out.print("출금하실 계좌를 선택하세요 : "); break;
+		case 4 : System.out.print("송금하실 계좌를 선택하세요 : "); break;
+		case 5 : System.out.print("조회하실 계좌를 선택하세요 : "); break;
 		}
 //		int index = sc.nextInt()-1;
 		int index = 0;
@@ -89,21 +105,8 @@ public class Menu {
 		return list.get(index);
 	}
 	
-	private void showDataMenu(Account acc) {
-		System.out.print("===============\n"
-				+ "1. 입금내역 조회\n"
-				+ "2. 출금내역 조회\n"
-				+ "3. 이전 메뉴로 돌아가기\n"
-				+ "번호 입력 : ");
-		int mnum = sc.nextInt();
-		switch(mnum) {
-		case 1 : printDlog(lc.getDlog(acc)); break;
-		case 2 : printWlog(lc.getWlog(acc)); break;
-		case 3 : break;
-		}
-	}
 	
-	
+	// 출력 메소드
 	private void printWlog(List<Log> list) {
 		if(list.isEmpty())
 			System.out.println("조회된 결과가 없습니다.");
@@ -111,7 +114,7 @@ public class Menu {
 			for(Log e : list) {
 				System.out.println("\n출금 시간 : "+e.getExDate());
 				System.out.println("출금 액 : "+ e.getWithdraw()+"원");
-				if(e.getType() != 1) {
+				if(e.getType() == 3) {
 					String[] names = e.getComment().split("-");
 					System.out.println("보낸 사람 : "+names[0]);
 					System.out.println("받는 사람 : "+names[1]);
@@ -130,7 +133,43 @@ public class Menu {
 			}
 		}
 	}
+	private void printAllLog(List<Log> list) {
+		if(list.isEmpty())
+			System.out.println("조회된 결과가 없습니다.");
+		else {
+			for(Log e : list) {
+				System.out.println("======================================");
+				if(e.getType() == 1) {
+					System.out.println("입금 시간 : "+e.getExDate());
+					System.out.println("입금 액 : "+ e.getDeposit()+"원 ");
+				}
+				else{
+					System.out.println("출금 시간 : "+e.getExDate());
+					System.out.println("출금 액 : "+ e.getWithdraw()+"원");
+					if(e.getType() == 3) {
+						String[] names = e.getComment().split("-");
+						System.out.println("보낸 사람 : "+names[0]);
+						System.out.println("받는 사람 : "+names[1]);
+					}
+				}
+			}
+			System.out.println("\n조회가 완료되었습니다.");
+		}
+	}
+	
 
+	private void printAcc(List<Account> list) {
+		if(list.isEmpty())
+			System.out.println("현재 생성된 계좌가 없습니다.");
+		else {
+			System.out.println("\n계좌번호 \t이름 \t잔액 \t개설날짜");
+			for(int i = 0; i < list.size(); i++) {
+				Account acc = list.get(i);
+				System.out.println("==================================================");
+				System.out.println(acc.getAccNumber()+"\t"+acc.getName()+"\t"+acc.getBal()+"원\t"+acc.getEstDate());
+			}
+		}
+	}
 	public Account putData() {
 		System.out.print("이름 입력 : ");
 		String name = sc.next();
@@ -160,9 +199,9 @@ public class Menu {
 	
 	private int howMuch(int num) {
 		switch(num) {
-		case 2 : System.out.print("입금하실 금액을 입력하세요 : "); break;
-		case 3 : System.out.print("출금하실 금액을 입력하세요 : "); break;
-		case 4 : System.out.print("송금하실 금액을 입력하세요 : "); break;
+		case 2 : System.out.print("\n입금하실 금액을 입력하세요 : "); break;
+		case 3 : System.out.print("\n출금하실 금액을 입력하세요 : "); break;
+		case 4 : System.out.print("\n송금하실 금액을 입력하세요 : "); break;
 		}
 		return sc.nextInt();
 	}
@@ -184,18 +223,6 @@ public class Menu {
 	private String putPwd() {
 		System.out.print("패스워드 입력 : ");
 		return sc.next();
-	}
-	private void printAcc(List<Account> list) {
-		if(list.isEmpty())
-			System.out.println("현재 생성된 계좌가 없습니다.");
-		else {
-			System.out.println("\n계좌번호 \t이름 \t잔액 \t개설날짜");
-			for(int i = 0; i < list.size(); i++) {
-				Account acc = list.get(i);
-				System.out.println("==================================================");
-				System.out.println(acc.getAccNumber()+"\t"+acc.getName()+"\t"+acc.getBal()+"원\t"+acc.getEstDate());
-			}
-		}
 	}
 	
 }

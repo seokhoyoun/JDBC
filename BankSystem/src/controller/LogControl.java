@@ -21,7 +21,7 @@ public class LogControl {
 	}
 
 	public void depositLog(Account acc, int dMoney) {
-		Log log = new Log(acc.getId(), 1, acc.getName());
+		Log log = new Log(acc.getId(), 1, acc.getName(), acc.getAccNumber());
 		log.setDeposit(dMoney);
 		try {
 			int result = ls.depositLog(log);
@@ -31,7 +31,7 @@ public class LogControl {
 	}
 
 	public void withdrawLog(Account acc, int wMoney) {
-		Log log = new Log(acc.getId(), 2, acc.getName());
+		Log log = new Log(acc.getId(), 2, acc.getName(),acc.getAccNumber());
 		log.setWithdraw(wMoney);
 		try {
 			int result = ls.withdrawLog(log);
@@ -41,7 +41,7 @@ public class LogControl {
 	}
 
 	public void transferLog(Account acc, Account rcc, int tMoney) {
-		Log log = new Log(acc.getId(), rcc.getId(), tMoney, 3, acc.getName()+"-"+rcc.getName());
+		Log log = new Log(acc.getId(), rcc.getId(), tMoney, 3, acc.getName()+"-"+rcc.getName(), acc.getAccNumber(), rcc.getAccNumber());
 		try {
 			int result = ls.transfer(log);
 		} catch (LogException e) {
@@ -56,6 +56,11 @@ public class LogControl {
 
 	public List<Log> getWlog(Account acc) {
 		ArrayList<Log> list = ls.getWlog(acc);
+		return list;
+	}
+
+	public List<Log> getAllLog(Account acc) {
+		ArrayList<Log> list = ls.getAllLog(acc);
 		return list;
 	}
 

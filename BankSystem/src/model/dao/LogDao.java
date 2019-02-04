@@ -32,6 +32,7 @@ public class LogDao {
 			ps.setString(1, log.getId());
 			ps.setInt(2, log.getDeposit());
 			ps.setString(3, log.getComment());
+			ps.setString(4, log.getAccNum());
 			result = ps.executeUpdate();
 			if(result <= 0) {
 				rollback(conn);
@@ -51,6 +52,7 @@ public class LogDao {
 			ps.setString(1, log.getId());
 			ps.setInt(2, log.getWithdraw());
 			ps.setString(3, log.getComment());
+			ps.setString(4, log.getAccNum());
 			result = ps.executeUpdate();
 			if(result <= 0) {
 				rollback(conn);
@@ -71,6 +73,8 @@ public class LogDao {
 			ps.setString(2, log.getReceiverId());
 			ps.setInt(3, log.getWithdraw());
 			ps.setString(4, log.getComment());
+			ps.setString(5, log.getAccNum());
+			ps.setString(6, log.getRccNum());
 			result = ps.executeUpdate();
 			if(result <= 0) {
 				rollback(conn);
@@ -89,7 +93,7 @@ public class LogDao {
 		PreparedStatement ps = null;
 				ResultSet rs = null;
 				String query = p.getProperty("getdlog");
-				String id = acc.getId();
+				String id = acc.getAccNumber();
 				try {
 					ps = conn.prepareStatement(query);
 					ps.setString(1, id);
@@ -98,6 +102,7 @@ public class LogDao {
 						Log log = new Log();
 						log.setExDate(rs.getString("date"));
 						log.setDeposit(rs.getInt("deposit"));
+						log.setAccNum(rs.getString("acc_number"));
 						
 						list.add(log);
 					}
@@ -126,6 +131,8 @@ public class LogDao {
 				log.setWithdraw(rs.getInt(2));
 				log.setType(rs.getShort(3));
 				log.setComment(rs.getString(4));
+				log.setAccNum(rs.getString(5));
+				log.setRccNum(rs.getString(6));
 				list.add(log);
 			}
 		} catch (SQLException e) {
@@ -138,7 +145,33 @@ public class LogDao {
 
 	private PreparedStatement createWlogPS(Connection conn, Account acc, String query) throws SQLException {
 		PreparedStatement ps = conn.prepareStatement(query);
-		ps.setString(1, acc.getId());
+		ps.setString(1, acc.getAccNumber());
+		return ps;
+	}
+
+	public ArrayList<Log> getAllLog(Connection conn, Account acc) {
+		ArrayList<Log> list = new ArrayList<>();
+		try(PreparedStatement ps = createAlogPS(conn, acc, p.getProperty("getalllog"));
+				ResultSet rs = ps.executeQuery()){
+			while(rs.next()) {
+				Log log = new Log();
+				log.setExDate(rs.getString(1));
+				log.setWithdraw(rs.getInt(2));
+				log.setType(rs.getShort(3));
+				log.setComment(rs.getString(4));
+				log.setAccNum(rs.getString(5));
+				log.setRccNum(rs.getString(6));
+				list.add(log);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	private PreparedStatement createAlogPS(Connection conn, Account acc, String query) throws SQLException {
+		PreparedStatement ps = conn.prepareStatement(query);
+		ps.setString(1, acc.getAccNumber());
 		return ps;
 	}
 

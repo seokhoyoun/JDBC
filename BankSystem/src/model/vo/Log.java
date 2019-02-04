@@ -13,26 +13,48 @@ public class Log implements Serializable{
 	private int withdraw; // 출금액
 	private int type; // 1.입금 2.출금 3.송금
 	private String comment;	// comment
+	private String accNum; // 사용 계좌
+	private String rccNum; // 받는 사람 계좌 (* 이체 시)
 	
 	public Log() {
 	}
 
-	// 입금용 생성자
-	public Log(String id, int type, String comment) {
+	// 입/출금용 생성자
+	public Log(String id, int type, String comment, String accNum) {
 		super();
 		this.id = id;
 		this.comment = comment;
 		this.type = type;
+		this.accNum = accNum;
 	}
 	// 송금용 생성자
 	
-	public Log(String id, String receiverId, int withdraw, int type, String comment) {
+	public Log(String id, String receiverId, int withdraw, int type, String comment, String accNum, String rccNum) {
 		super();
 		this.id = id;
 		this.receiverId = receiverId;
 		this.withdraw = withdraw;
 		this.type = type;
 		this.comment = comment;
+		this.accNum = accNum;
+		this.rccNum = rccNum;
+	}
+
+	
+	public String getAccNum() {
+		return accNum;
+	}
+
+	public void setAccNum(String accNum) {
+		this.accNum = accNum;
+	}
+
+	public String getRccNum() {
+		return rccNum;
+	}
+
+	public void setRccNum(String rccNum) {
+		this.rccNum = rccNum;
 	}
 
 	public int getType() {

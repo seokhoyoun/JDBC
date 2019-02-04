@@ -56,4 +56,10 @@ public class LogService {
 		return list;
 	}
 
+	public ArrayList<Log> getAllLog(Account acc) {
+		Connection conn = getConnection();
+		ArrayList<Log> list = ld.getAllLog(conn, acc);
+		return list;
+	}
+
 }
