@@ -40,8 +40,25 @@ public class Menu {
 	}
 	
 	private void managerMenu(ArrayList<Account> list) {
-		System.out.println("관리자 메뉴 접속...");
+		System.out.println("관리자 메뉴 접속중...\n");
+		while(true) {
+			System.out.println("======================\n"
+					+ "1. 전체 계좌 조회\n"
+					+ "2. 계좌 검색\n"
+					+ "3. 계좌 수정\n"
+					+ "4. 계좌 삭제\n"
+					+ "번호 입력 : ");
+			int mnum = sc.nextInt();
+			switch(mnum) {
+			case 1 : printAcc(ac.searchAll());break;
+			case 2 : printAcc(ac.searchKey(putKey()));break;
+			case 3 : break;
+			case 4 : break;
+			}
+		}
 	}
+
+	
 
 	private void userMenu(ArrayList<Account> list) {
 		System.out.println("\n사용자 메뉴 접속중...");
@@ -170,6 +187,11 @@ public class Menu {
 			}
 		}
 	}
+	private String putKey() {
+		System.out.print("검색어 입력 : ");
+		return sc.next();
+	}
+	
 	public Account putData() {
 		System.out.print("이름 입력 : ");
 		String name = sc.next();

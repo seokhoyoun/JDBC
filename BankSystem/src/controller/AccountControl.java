@@ -97,6 +97,21 @@ public class AccountControl {
 		return list;
 	}
 
+	public ArrayList<Account> searchAll() {
+		ArrayList<Account> list = as.searchAll();
+		return list;
+	}
+
+	public List<Account> searchKey(String key) {
+		ArrayList<Account> list = as.searchAll();
+		ArrayList<Account> keylist = new ArrayList<>();
+		for(int i = 0; i < list.size(); i++) {
+			if(list.get(i).toString().contains(key)) 
+				keylist.add(list.get(i));
+		}
+		return keylist;
+	}
+
 	
 
 	

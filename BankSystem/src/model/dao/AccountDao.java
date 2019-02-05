@@ -170,6 +170,27 @@ public class AccountDao {
 		ps.setString(1, acc.getId());
 		return ps;
 	}
+	public ArrayList<Account> searchAll(Connection conn) {
+		ArrayList<Account> list = new ArrayList<>();
+		try(PreparedStatement ps = createSearchAllPS(conn, p.getProperty("searchall"));
+				ResultSet rs = ps.executeQuery()){
+			while(rs.next()) {
+				Account myAcc = new Account();
+				myAcc.setAccNumber(rs.getString(1));
+				myAcc.setName(rs.getString(5));
+				myAcc.setEstDate(rs.getDate(6));
+				myAcc.setBal(rs.getInt(3));
+				list.add(myAcc);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	private PreparedStatement createSearchAllPS(Connection conn, String query) throws SQLException {
+		PreparedStatement ps = conn.prepareStatement(query);
+		return ps;
+	}
 	
 	
 	

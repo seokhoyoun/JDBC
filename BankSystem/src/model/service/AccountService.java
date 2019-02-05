@@ -62,6 +62,12 @@ public class AccountService {
 		return list;
 	}
 
+	public ArrayList<Account> searchAll() {
+		Connection conn = getConnection();
+		ArrayList<Account> list = ad.searchAll(conn); 
+		return list;
+	}
+
 	
 
 }
